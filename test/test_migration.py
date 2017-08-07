@@ -16,5 +16,5 @@ class TestMigration(base_test.BaseTest):
             self.assertIsNotNone(vip)
             self.assertEqual(person.id, vip.id)
             self.assertEqual(person.nombre, vip.nombre)
-            self.assertNotEqual(person.apellido, vip.apellido)
+            self.assertEqual(person.apellido, vip.apellido)
             self.assertEqual(person.edad, vip.edad)

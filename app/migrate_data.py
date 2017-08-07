@@ -1,5 +1,5 @@
 from app import db
-from models.tiny_models import Person, VIP
+from test_models.tiny_models import Person, VIP
 
 
 def upgrade_to_vip(an_id):
