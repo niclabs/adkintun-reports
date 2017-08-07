@@ -1,5 +1,5 @@
-from app.app import application, db
-from models.tiny_models import Person, VIP
+from app import application, db
+from test_models.tiny_models import Person, VIP
 from test import base_test
 
 

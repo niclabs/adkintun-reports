@@ -1,4 +1,4 @@
-from app.app import db
+from app import db
 from models.tiny_models import Person, VIP
 
 

@@ -1,4 +1,5 @@
-from app.app import db
+from app import db
+
 
 class Person(db.Model):
     __tablename__ = 'useless'
@@ -13,9 +14,10 @@ class Person(db.Model):
         self.apellido = un_apellido
         self.edad = una_edad
 
+
 class VIP(db.Model):
     __tablename__ = 'useful'
-    __bind_key__ = 'everything'
+    __bind_key__ = 'frontend'
     id = db.Column('id', db.Integer, primary_key=True)
     nombre = db.Column('nombre', db.String(10))
     apellido = db.Column('apellido', db.String(10))

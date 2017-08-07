@@ -1,5 +1,5 @@
-from app.app import application, db
-from models.tiny_models import Person, VIP
+from app import application, db
+from test_models.tiny_models import Person, VIP
 from test import base_test
 from app.migrate_data import upgrade_to_vip
 
