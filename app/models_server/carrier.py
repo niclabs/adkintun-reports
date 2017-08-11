@@ -3,7 +3,6 @@ from typing import TypeVar
 from app import db, application
 from app.models_server import base_model
 
-
 class Carrier(base_model.BaseModel):
     '''
     Carrier model class
@@ -33,7 +32,7 @@ class Carrier(base_model.BaseModel):
         """
         Add sim to sims parameter in a carrier, just if it was not previously added.
         """
-        from app.models.sim import Sim
+        from app.models_server.sim import Sim
         existent_sim = self.sims.filter(Sim.serial_number == sim.serial_number).first()
         if not existent_sim:
             self.sims.append(sim)
