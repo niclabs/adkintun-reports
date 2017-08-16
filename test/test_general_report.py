@@ -4,7 +4,7 @@ from app.models_server.device import Device
 from app.models_server.sim import Sim
 from app.models_server.carrier import Carrier
 from app.models_server.gsm_event import GsmEvent
-from app.report.general_report import generate_general_reports
+from app.report.general_report_generation import general_report
 from test import base_test
 
 
@@ -60,7 +60,7 @@ class TestGeneralReport(base_test.BaseTest):
         with application.app_context():
 
             self.populate()
-            report = generate_general_reports(datetime.now() + timedelta(days=-1), None)
+            report = general_report(datetime.now() + timedelta(days=-1), None)
 
             # tests for total data
             self.assertEqual(report['total_devices'], 4)

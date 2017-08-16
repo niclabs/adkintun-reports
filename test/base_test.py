@@ -1,5 +1,6 @@
 import unittest
-from app import application, db
+from app import db
+
 
 class BaseTest(unittest.TestCase):
 
@@ -8,4 +9,4 @@ class BaseTest(unittest.TestCase):
         db.create_all()
 
     def tearDown(self):
-        db.drop_all()
+        pass

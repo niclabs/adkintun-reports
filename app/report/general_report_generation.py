@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy import text
 
 
-def generate_general_reports(init_date, last_date):
+def general_report(init_date, last_date):
     """
     Calculate the report values and return a dictionary.
     :return: a dictionary with summarized data.
