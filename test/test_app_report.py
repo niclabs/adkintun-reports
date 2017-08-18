@@ -2,6 +2,7 @@ from datetime import datetime
 from app import application, db
 from test import base_test
 from app.report.app_report_generation import app_report
+
 from app.models_server.device import Device
 from app.models_server.sim import Sim
 from app.models_server.carrier import Carrier

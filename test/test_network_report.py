@@ -1,7 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from app import application, db
 from test import base_test
 from app.report.network_report_generation import network_report_for_carrier
+
 from app.models_server.sim import Sim
 from app.models_server.carrier import Carrier
 from app.models_server.gsm_event import GsmEvent
@@ -46,16 +47,20 @@ class TestNetworkReport(base_test.BaseTest):
         sim1.events.append(event5)
         antenna2.gsm_events.append(event5)
 
+        # should not show in report
+        event6 = GsmEvent(network_type=6, date=datetime.now()+timedelta(days=1))
+        sim2.events.append(event6)
+        antenna2.gsm_events.append(event6)
+
         db.session.add(carrier1)
         db.session.add(carrier2)
-        db.session.add(antenna1)
-        db.session.add(antenna2)
         db.session.commit()
 
     def test_report_generation(self):
         with application.app_context():
             self.populate()
             report = network_report_for_carrier()
+            self.assertEqual(len(report), 4)
 
             # carrier_1, on antenna_2, on wifi
             self.assertEqual(report[0]['carrier_id'], 1000)
