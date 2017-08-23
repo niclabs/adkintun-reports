@@ -1,4 +1,4 @@
-from app import db
+from app import db2
 from app.models_frontend import base_model
 from sqlalchemy import UniqueConstraint
 
@@ -6,17 +6,16 @@ from sqlalchemy import UniqueConstraint
 class Antenna(base_model.BaseModel):
     __tablename__ = 'antennas'
     __table_args__ = (UniqueConstraint("cid", "lac", "carrier_id", name="antenna_pk"), {})
-    __bind_key__ = 'frontend'
-    id = db.Column(db.Integer, primary_key=True)
-    cid = db.Column(db.Integer)
-    lac = db.Column(db.Integer)
-    lat = db.Column(db.Float)
-    lon = db.Column(db.Float)
-    carrier_id = db.Column(db.Integer, db.ForeignKey("carriers.id"))
-    city_id = db.Column(db.Integer, db.ForeignKey('city.id'))
-    gsm_counts = db.relationship('GsmCount', backref='antenna',
+    id = db2.Column(db2.Integer, primary_key=True)
+    cid = db2.Column(db2.Integer)
+    lac = db2.Column(db2.Integer)
+    lat = db2.Column(db2.Float)
+    lon = db2.Column(db2.Float)
+    carrier_id = db2.Column(db2.Integer, db2.ForeignKey("carriers.id"))
+    city_id = db2.Column(db2.Integer, db2.ForeignKey('city.id'))
+    gsm_counts = db2.relationship('GsmCount', backref='antenna',
                                  lazy='dynamic')
-    gsm_signals= db.relationship('GsmSignal', backref='antenna',
+    gsm_signals = db2.relationship('GsmSignal', backref='antenna',
                                  lazy='dynamic')
 
     def __init__(self, id=None, cid=None, lac=None, lat=None, lon=None, carrier_id=None, city_id=None):

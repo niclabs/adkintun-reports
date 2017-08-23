@@ -1,4 +1,4 @@
-from app import db
+from app import db1
 from datetime import datetime
 from sqlalchemy import text
 
@@ -68,7 +68,7 @@ def app_report(min_date=datetime(2015, 1, 1), max_date=None):
                         ORDER BY bytes DESC) AS QUERY
                      ORDER BY bytes_per_user DESC LIMIT :number_app;""")
 
-                result = db.session.query().add_columns("bytes_per_user", "bytes", "devices",
+                result = db1.session.query().add_columns("bytes_per_user", "bytes", "devices",
                                                         "app_name").from_statement(stmt).params(
                     min_date=min_date, max_date=max_date, network_type=value, carrier_id=carrier, number_app=10)
                 count = 1

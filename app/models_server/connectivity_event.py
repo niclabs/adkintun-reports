@@ -1,4 +1,4 @@
-from app import db
+from app import db1
 from app.models_server.event import Event
 
 
@@ -9,13 +9,13 @@ class ConnectivityEvent(Event):
     __tablename__ = 'connectivity_events'
     __mapper_args__ = {'polymorphic_identity': 'connectivity_event'}
 
-    id = db.Column(db.Integer, db.ForeignKey('events.id'), primary_key=True)
-    detailed_state = db.Column(db.Integer)
-    available = db.Column(db.Boolean)
-    connected = db.Column(db.Boolean)
-    roaming = db.Column(db.Boolean)
-    connection_type = db.Column(db.Integer)
-    connection_type_other = db.Column(db.Integer)
+    id = db1.Column(db1.Integer, db1.ForeignKey('events.id'), primary_key=True)
+    detailed_state = db1.Column(db1.Integer)
+    available = db1.Column(db1.Boolean)
+    connected = db1.Column(db1.Boolean)
+    roaming = db1.Column(db1.Boolean)
+    connection_type = db1.Column(db1.Integer)
+    connection_type_other = db1.Column(db1.Integer)
 
     def __init__(self, date=None, app_version_code=None, sim_serial_number=None, device_id=None, detailed_state=None,
                  available=None, connected=None, roaming=None, connection_type=None, connection_type_other=None):

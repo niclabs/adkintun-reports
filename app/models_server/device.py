@@ -1,4 +1,4 @@
-from app import db, application
+from app import db1, application1
 from app.models_server import base_model
 
 
@@ -7,20 +7,20 @@ class Device(base_model.BaseModel):
     Device model class
     """
     __tablename__ = "devices"
-    device_id = db.Column(db.String(50), primary_key=True)
-    brand = db.Column(db.String(50))
-    board = db.Column(db.String(50))
-    build_id = db.Column(db.String(100))
-    creation_date = db.Column(db.Date())
-    device = db.Column(db.String(50))
-    hardware = db.Column(db.String(50))
-    manufacturer = db.Column(db.String(50))
-    model = db.Column(db.String(50))
-    release = db.Column(db.String(50))
-    release_type = db.Column(db.String(50))
-    product = db.Column(db.String(50))
-    sdk = db.Column(db.Integer)
-    events = db.relationship("Event", backref="device", lazy="dynamic")
+    device_id = db1.Column(db1.String(50), primary_key=True)
+    brand = db1.Column(db1.String(50))
+    board = db1.Column(db1.String(50))
+    build_id = db1.Column(db1.String(100))
+    creation_date = db1.Column(db1.Date())
+    device = db1.Column(db1.String(50))
+    hardware = db1.Column(db1.String(50))
+    manufacturer = db1.Column(db1.String(50))
+    model = db1.Column(db1.String(50))
+    release = db1.Column(db1.String(50))
+    release_type = db1.Column(db1.String(50))
+    product = db1.Column(db1.String(50))
+    sdk = db1.Column(db1.Integer)
+    events = db1.relationship("Event", backref="device", lazy="dynamic")
 
     def __init__(self, device_id, brand=None, board=None, build_id=None, device=None, hardware=None,
                  manufacturer=None, model=None, release=None, release_type=None, product=None, sdk=None,
@@ -65,12 +65,12 @@ class Device(base_model.BaseModel):
                     product=args["product"],
                     sdk=args["sdk"],
                     creation_date=datetime.now())
-                db.session.add(device)
+                db1.session.add(device)
                 try:
-                    db.session.commit()
+                    db1.session.commit()
                 except Exception as e:
-                    db.session.rollback()
-                    application.logger.error("Error adding device to database - " + str(e))
+                    db1.session.rollback()
+                    application1.logger.error("Error adding device to database - " + str(e))
             return device
         else:
             return None

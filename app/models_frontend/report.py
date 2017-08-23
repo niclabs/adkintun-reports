@@ -1,16 +1,15 @@
-from app import db
+from app import db2
 from app.models_frontend import base_model
 from sqlalchemy import PrimaryKeyConstraint
 
 
 class Report(base_model.BaseModel):
     __tablename__ = 'report'
-    __bind_key__ = 'frontend'
-    year = db.Column(db.Integer)
-    month = db.Column(db.Integer)
-    type = db.Column(db.String)
-    carrier_id = db.Column(db.Integer, db.ForeignKey('carriers.id'))
-    quantity = db.Column(db.Integer)
+    year = db2.Column(db2.Integer)
+    month = db2.Column(db2.Integer)
+    type = db2.Column(db2.String)
+    carrier_id = db2.Column(db2.Integer, db2.ForeignKey('carriers.id'))
+    quantity = db2.Column(db2.Integer)
     __table_args__ = (PrimaryKeyConstraint("year", "month", "type", "carrier_id", name="report_pk"), {})
 
     def __init__(self, year=None, month=None, type=None, carrier_id=None, quantity=None):

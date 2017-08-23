@@ -1,8 +1,8 @@
-from app import db
+from app import db2
 from app.models_frontend import utils
 
 
-class BaseModel(db.Model):
+class BaseModel(db2.Model):
     __abstract__ = True
 
     @property

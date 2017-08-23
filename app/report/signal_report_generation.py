@@ -1,4 +1,4 @@
-from app import db
+from app import db1
 from datetime import datetime
 from sqlalchemy import text
 
@@ -45,7 +45,7 @@ def signal_strength_mean_for_antenna(min_date=datetime(2015, 1, 1),
     ) AS c1
     GROUP BY carrier_id, antenna_id) AS c2;""")
 
-    result = db.session.query().with_labels().add_columns("carrier_id", "antenna_id", "observations",
+    result = db1.session.query().with_labels().add_columns("carrier_id", "antenna_id", "observations",
                                                           "signal_mean").from_statement(
         stmt).params(
         min_date=min_date, max_date=max_date)

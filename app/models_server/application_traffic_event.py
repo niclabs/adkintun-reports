@@ -1,4 +1,4 @@
-from app import db
+from app import db1
 from app.models_server.traffic_event import TrafficEvent
 
 
@@ -9,9 +9,9 @@ class ApplicationTrafficEvent(TrafficEvent):
     __tablename__ = 'application_traffic_events'
     __mapper_args__ = {'polymorphic_identity': 'application_traffic_event'}
 
-    id = db.Column(db.Integer, db.ForeignKey('traffic_events.id'), primary_key=True)
+    id = db1.Column(db1.Integer, db1.ForeignKey('traffic_events.id'), primary_key=True)
 
-    application_id = db.Column(db.Integer, db.ForeignKey('applications.id'))
+    application_id = db1.Column(db1.Integer, db1.ForeignKey('applications.id'))
 
     def __init__(self, date=None, app_version_code=None, sim_serial_number=None, device_id=None, network_type=None,
                  rx_bytes=None, tx_bytes=None, rx_packets=None, tx_packets=None, tcp_rx_bytes=None, tcp_tx_bytes=None,

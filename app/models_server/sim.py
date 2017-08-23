@@ -1,4 +1,4 @@
-from app import db, application
+from app import db1, application1
 from app.models_server import base_model
 from app.models_server.device_sim import devices_sims
 
@@ -9,12 +9,12 @@ class Sim(base_model.BaseModel):
     """
     __tablename__ = "sims"
 
-    serial_number = db.Column(db.String(50), primary_key=True)
-    creation_date = db.Column(db.Date())
-    carrier_id = db.Column(db.Integer, db.ForeignKey("carriers.id"))
-    devices = db.relationship("Device", secondary=devices_sims, backref=db.backref("sims", lazy="dynamic"),
+    serial_number = db1.Column(db1.String(50), primary_key=True)
+    creation_date = db1.Column(db1.Date())
+    carrier_id = db1.Column(db1.Integer, db1.ForeignKey("carriers.id"))
+    devices = db1.relationship("Device", secondary=devices_sims, backref=db1.backref("sims", lazy="dynamic"),
                               lazy="dynamic")
-    events = db.relationship("Event", backref="sim", lazy="dynamic")
+    events = db1.relationship("Event", backref="sim", lazy="dynamic")
 
     def __init__(self, serial_number=None, creation_date=None, carrier_id=None):
         self.serial_number = serial_number
@@ -37,19 +37,19 @@ class Sim(base_model.BaseModel):
 
             if not sim:
                 sim = Sim(serial_number=args["serial_number"], creation_date=datetime.now())
-                db.session.add(sim)
+                db1.session.add(sim)
                 try:
-                    db.session.commit()
+                    db1.session.commit()
                 except Exception as e:
-                    db.session.rollback()
-                    application.logger.error(
+                    db1.session.rollback()
+                    application1.logger.error(
                         "Error adding new sim, serial_number:" + str(sim.serial_number) + "-" + str(e))
             return sim
         else:
             return None
 
     def add_device(self, device):
-        from app.models.device import Device
+        from app.models_server.device import Device
 
         existent_device = self.devices.filter(Device.device_id == device.device_id).first()
         if not existent_device:

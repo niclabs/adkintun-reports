@@ -1,4 +1,4 @@
-from app import db
+from app import db1
 from app.models_server.event import Event
 
 
@@ -8,13 +8,13 @@ class TrafficEvent(Event):
     '''
     __tablename__ = 'traffic_events'
 
-    id = db.Column(db.Integer, db.ForeignKey('events.id'), primary_key=True)
-    network_type = db.Column(db.Integer)
-    rx_bytes = db.Column(db.BigInteger)
-    tx_bytes = db.Column(db.BigInteger)
-    rx_packets = db.Column(db.BigInteger)
-    tx_packets = db.Column(db.BigInteger)
-    tcp_rx_bytes = db.Column(db.BigInteger)
-    tcp_tx_bytes = db.Column(db.BigInteger)
+    id = db1.Column(db1.Integer, db1.ForeignKey('events.id'), primary_key=True)
+    network_type = db1.Column(db1.Integer)
+    rx_bytes = db1.Column(db1.BigInteger)
+    tx_bytes = db1.Column(db1.BigInteger)
+    rx_packets = db1.Column(db1.BigInteger)
+    tx_packets = db1.Column(db1.BigInteger)
+    tcp_rx_bytes = db1.Column(db1.BigInteger)
+    tcp_tx_bytes = db1.Column(db1.BigInteger)
 
 

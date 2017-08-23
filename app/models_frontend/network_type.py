@@ -1,13 +1,12 @@
-from app import db
+from app import db2
 from app.models_frontend import base_model
 
 
 class NetworkType(base_model.BaseModel):
     __tablename__ = 'network_type'
-    __bind_key__ = 'frontend'
-    id = db.Column(db.Integer, primary_key=True, unique=True)
-    name = db.Column(db.String(10))
-    type = db.Column(db.String(5))
+    id = db2.Column(db2.Integer, primary_key=True, unique=True)
+    name = db2.Column(db2.String(10))
+    type = db2.Column(db2.String(5))
 
     def __init__(self, net_id=None, name=None, net_type=None):
         self.id = net_id

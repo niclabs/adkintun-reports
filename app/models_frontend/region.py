@@ -1,16 +1,15 @@
-from app import db
+from app import db2
 from app.models_frontend import base_model
 
 
 class Region(base_model.BaseModel):
     __tablename__ = 'region'
-    __bind_key__ = 'frontend'
-    id = db.Column(db.Integer, primary_key=True, unique=True)
-    name = db.Column(db.String(50))
-    cities = db.relationship('City', backref='region',
+    id = db2.Column(db2.Integer, primary_key=True, unique=True)
+    name = db2.Column(db2.String(50))
+    cities = db2.relationship('City', backref='region',
                              lazy='dynamic')
-    lat = db.Column(db.Float)
-    lon = db.Column(db.Float)
+    lat = db2.Column(db2.Float)
+    lon = db2.Column(db2.Float)
 
     def __init__(self, id=None, name=None, lat=None, lon=None):
         self.id = id

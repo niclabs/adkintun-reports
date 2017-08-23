@@ -1,4 +1,4 @@
-from app import db
+from app import db2
 from app.models_frontend import base_model
 from sqlalchemy import PrimaryKeyConstraint
 from sqlalchemy.dialects.postgresql import JSON
@@ -6,22 +6,21 @@ from sqlalchemy.dialects.postgresql import JSON
 
 class Ranking(base_model.BaseModel):
     __tablename__ = 'ranking'
-    __bind_key__ = 'frontend'
 
-    id = db.Column(db.Integer, primary_key=True, unique=True)
-    year = db.Column(db.Integer)
-    month = db.Column(db.Integer)
+    id = db2.Column(db2.Integer, primary_key=True, unique=True)
+    year = db2.Column(db2.Integer)
+    month = db2.Column(db2.Integer)
 
     # New columns for the new parameters of the raking
-    ranking_number = db.Column(db.Integer)
-    total_bytes = db.Column(db.String(100))
-    bytes_per_user = db.Column(db.Float)
-    total_devices = db.Column(db.String(100))
-    app_name = db.Column(db.String(100))
+    ranking_number = db2.Column(db2.Integer)
+    total_bytes = db2.Column(db2.String(100))
+    bytes_per_user = db2.Column(db2.Float)
+    total_devices = db2.Column(db2.String(100))
+    app_name = db2.Column(db2.String(100))
 
-    carrier_id = db.Column(db.Integer, db.ForeignKey('carriers.id'))
-    traffic_type = db.Column(db.String(20))
-    transfer_type = db.Column(db.String(20))
+    carrier_id = db2.Column(db2.Integer, db2.ForeignKey('carriers.id'))
+    traffic_type = db2.Column(db2.String(20))
+    transfer_type = db2.Column(db2.String(20))
 
     def __init__(self, year=None, month=None, carrier_id=None, traffic_type=None, transfer_type=None,
                  ranking_number=None, total_bytes=None, bytes_per_user=None, total_devices=None, app_name=None):

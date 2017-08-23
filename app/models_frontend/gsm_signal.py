@@ -1,17 +1,16 @@
-from app import db
+from app import db2
 from app.models_frontend import base_model
 from sqlalchemy import PrimaryKeyConstraint
 
 
 class GsmSignal(base_model.BaseModel):
     __tablename__ = 'gsm_signal'
-    __bind_key__ = 'frontend'
-    year = db.Column(db.Integer)
-    month = db.Column(db.Integer)
-    antenna_id = db.Column(db.Integer, db.ForeignKey('antennas.id'))
-    carrier_id = db.Column(db.Integer, db.ForeignKey('carriers.id'))
-    signal = db.Column(db.Float)
-    quantity = db.Column(db.Integer)
+    year = db2.Column(db2.Integer)
+    month = db2.Column(db2.Integer)
+    antenna_id = db2.Column(db2.Integer, db2.ForeignKey('antennas.id'))
+    carrier_id = db2.Column(db2.Integer, db2.ForeignKey('carriers.id'))
+    signal = db2.Column(db2.Float)
+    quantity = db2.Column(db2.Integer)
     __table_args__ = (
         PrimaryKeyConstraint("year", "month", "antenna_id", "carrier_id", name="gsm_signal_pk"), {})
 

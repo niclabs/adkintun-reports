@@ -1,8 +1,8 @@
-from app import db
+from app import db1
 from app.models_server import utils
 
 
-class BaseModel(db.Model):
+class BaseModel(db1.Model):
     '''
     Clase modelo base.
     '''

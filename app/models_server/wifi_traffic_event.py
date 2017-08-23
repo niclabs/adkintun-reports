@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from app import db
+from app import db1
 from app.models_server.traffic_event import TrafficEvent
 
 
@@ -11,7 +11,7 @@ class WifiTrafficEvent(TrafficEvent):
     __tablename__ = 'wifi_traffic_events'
     __mapper_args__ = {'polymorphic_identity': 'wifi_traffic_event'}
 
-    id = db.Column(db.Integer, db.ForeignKey('traffic_events.id'), primary_key=True)
+    id = db1.Column(db1.Integer, db1.ForeignKey('traffic_events.id'), primary_key=True)
 
     def __init__(self, date: datetime = None, app_version_code=None, sim_serial_number=None, device_id=None,
                  network_type=None,

@@ -1,4 +1,4 @@
-from app import db
+from app import db1
 from datetime import datetime
 from sqlalchemy import text
 from app.models_server.telephony_observation_event import TelephonyObservationEvent
@@ -38,7 +38,7 @@ def network_report_for_carrier(min_date=datetime(2015, 1, 1),
         antennas.id,
         sims.carrier_id;""")
 
-    result = db.session.query(TelephonyObservationEvent.network_type, Antenna.id,
+    result = db1.session.query(TelephonyObservationEvent.network_type, Antenna.id,
                               Sim.carrier_id).add_columns("size").from_statement(stmt).params(
         min_date=min_date, max_date=max_date)
 

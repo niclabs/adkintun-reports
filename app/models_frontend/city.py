@@ -1,17 +1,16 @@
-from app import db
+from app import db2
 from app.models_frontend import base_model
 
 
 class City(base_model.BaseModel):
     __tablename__ = 'city'
-    __bind_key__ = 'frontend'
-    id = db.Column(db.Integer, primary_key=True, unique=True)
-    name = db.Column(db.String(50))
-    antennas = db.relationship('Antenna', backref='city',
+    id = db2.Column(db2.Integer, primary_key=True, unique=True)
+    name = db2.Column(db2.String(50))
+    antennas = db2.relationship('Antenna', backref='city',
                                lazy='dynamic')
-    region_id = db.Column(db.Integer, db.ForeignKey('region.id'))
-    lat = db.Column(db.Float)
-    lon = db.Column(db.Float)
+    region_id = db2.Column(db2.Integer, db2.ForeignKey('region.id'))
+    lat = db2.Column(db2.Float)
+    lon = db2.Column(db2.Float)
 
 
     def __init__(self, id, name=None, region_id=None):

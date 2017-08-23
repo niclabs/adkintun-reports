@@ -1,4 +1,4 @@
-from app import db
+from app import db1
 from app.models_server.telephony_observation_event import TelephonyObservationEvent
 
 
@@ -9,24 +9,24 @@ class CdmaEvent(TelephonyObservationEvent):
     __tablename__ = 'cdma_events'
     __mapper_args__ = {'polymorphic_identity': 'cdma_event'}
 
-    id = db.Column(db.Integer, db.ForeignKey('telephony_observation_events.id'), primary_key=True)
-    cdma_base_latitude = db.Column(db.Integer)
-    cdma_base_longitude = db.Column(db.Integer)
-    cdma_base_station_id = db.Column(db.Integer)
-    network_id = db.Column(db.Integer)
-    system_id = db.Column(db.Integer)
-    cdma_ecio_size = db.Column(db.Integer)
-    cdma_ecio_mean = db.Column(db.Float)
-    cdma_ecio_variance = db.Column(db.Float)
-    evdo_dbm_size = db.Column(db.Integer)
-    evdo_dbm_mean = db.Column(db.Float)
-    evdo_dbm_variance = db.Column(db.Float)
-    evdo_ecio_size = db.Column(db.Integer)
-    evdo_ecio_mean = db.Column(db.Float)
-    evdo_ecio_variance = db.Column(db.Float)
-    evdo_snr_size = db.Column(db.Integer)
-    evdo_snr_mean = db.Column(db.Float)
-    evdo_snr_variance = db.Column(db.Float)
+    id = db1.Column(db1.Integer, db1.ForeignKey('telephony_observation_events.id'), primary_key=True)
+    cdma_base_latitude = db1.Column(db1.Integer)
+    cdma_base_longitude = db1.Column(db1.Integer)
+    cdma_base_station_id = db1.Column(db1.Integer)
+    network_id = db1.Column(db1.Integer)
+    system_id = db1.Column(db1.Integer)
+    cdma_ecio_size = db1.Column(db1.Integer)
+    cdma_ecio_mean = db1.Column(db1.Float)
+    cdma_ecio_variance = db1.Column(db1.Float)
+    evdo_dbm_size = db1.Column(db1.Integer)
+    evdo_dbm_mean = db1.Column(db1.Float)
+    evdo_dbm_variance = db1.Column(db1.Float)
+    evdo_ecio_size = db1.Column(db1.Integer)
+    evdo_ecio_mean = db1.Column(db1.Float)
+    evdo_ecio_variance = db1.Column(db1.Float)
+    evdo_snr_size = db1.Column(db1.Integer)
+    evdo_snr_mean = db1.Column(db1.Float)
+    evdo_snr_variance = db1.Column(db1.Float)
 
     def __init__(self, date=None, app_version_code=None, sim_serial_number=None, device_id=None,
                  telephony_standard=None, network_type=None, cdma_base_latitude=None, cdma_base_longitude=None,

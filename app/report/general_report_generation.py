@@ -1,4 +1,4 @@
-from app import db
+from app import db1
 from datetime import datetime
 from sqlalchemy import text
 
@@ -103,7 +103,7 @@ def total_device_for_carrier(min_date=datetime(2015, 1, 1),
     WHERE devices.creation_date BETWEEN :min_date AND :max_date) as consulta_1
     GROUP BY consulta_1.id""")
 
-    result = db.session.query().add_columns("id", "devices_count").from_statement(stmt).params(
+    result = db1.session.query().add_columns("id", "devices_count").from_statement(stmt).params(
         min_date=min_date, max_date=max_date)
 
     return result.all()
@@ -125,7 +125,7 @@ def total_sims_for_carrier(min_date=datetime(2015, 1, 1),
     WHERE sims.creation_date BETWEEN :min_date AND :max_date
     GROUP BY sims.carrier_id""")
 
-    result = db.session.query(Sim.carrier_id).add_columns("sims_count").from_statement(stmt).params(
+    result = db1.session.query(Sim.carrier_id).add_columns("sims_count").from_statement(stmt).params(
         min_date=min_date, max_date=max_date)
 
     return result.all()
@@ -149,7 +149,7 @@ def total_gsm_events_for_carrier(min_date=datetime(2015, 1, 1),
     WHERE events.date BETWEEN :min_date AND :max_date
     GROUP BY carrier_id """)
 
-    result = db.session.query(GsmEvent.carrier_id).add_columns("events_count").from_statement(stmt).params(
+    result = db1.session.query(GsmEvent.carrier_id).add_columns("events_count").from_statement(stmt).params(
         min_date=min_date, max_date=max_date)
 
     return result.all()

@@ -1,23 +1,22 @@
-from app import db
+from app import db2
 from app.models_frontend import base_model
 
 
 class Carrier(base_model.BaseModel):
     __tablename__ = 'carriers'
-    __bind_key__ = 'frontend'
-    id = db.Column(db.Integer, primary_key=True, unique=True)
-    name = db.Column(db.String(50))
-    mcc = db.Column(db.Integer)
-    mnc = db.Column(db.Integer)
-    reports = db.relationship('Report', backref='carrier',
+    id = db2.Column(db2.Integer, primary_key=True, unique=True)
+    name = db2.Column(db2.String(50))
+    mcc = db2.Column(db2.Integer)
+    mnc = db2.Column(db2.Integer)
+    reports = db2.relationship('Report', backref='carrier',
                               lazy='dynamic')
-    rankings = db.relationship('Ranking', backref='carrier',
+    rankings = db2.relationship('Ranking', backref='carrier',
                                lazy='dynamic')
-    antennas = db.relationship("Antenna", backref='carrier', lazy='dynamic')
+    antennas = db2.relationship("Antenna", backref='carrier', lazy='dynamic')
 
-    gsm_counts = db.relationship('GsmCount', backref='carrier',
+    gsm_counts = db2.relationship('GsmCount', backref='carrier',
                                  lazy='dynamic')
-    gsm_signals = db.relationship('GsmSignal', backref='carrier',
+    gsm_signals = db2.relationship('GsmSignal', backref='carrier',
                                   lazy='dynamic')
 
     def __init__(self, name=None, mcc=None, mnc=None):

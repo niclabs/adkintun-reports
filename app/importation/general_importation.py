@@ -1,7 +1,11 @@
-from app import db
+from app import application1, application2, db2
+from app.models_server.antenna import Antenna as Antenna1
+from app.models_frontend.antenna import Antenna as Antenna2
 from app.models_frontend.carrier import Carrier
 from app.models_frontend.report import Report
 from app.models_frontend.ranking import Ranking
+from app.models_frontend.gsm_signal import GsmSignal
+from app.models_frontend.gsm_count import GsmCount
 from sqlalchemy.exc import IntegrityError
 
 
@@ -20,7 +24,7 @@ def report_import(data, year, month):
                         carrier_id = int(carrier)
                     else:
                         continue
-                    # Ignoring the carriers not listed
+                        # Ignoring the carriers not listed
                     if carrier_id not in carrierIds:
                         continue
                     insert_or_update_report(Report(year, month, report_type, carrier_id, quantity))
@@ -28,20 +32,20 @@ def report_import(data, year, month):
                 carrier_id = 0
                 insert_or_update_report(Report(year, month, report_type, carrier_id, element))
     except IntegrityError:
-        db.session.rollback()
+        db2.session.rollback()
 
 
 def insert_or_update_report(report):
     try:
-        db.session.add(report)
-        db.session.commit()
+        db2.session.add(report)
+        db2.session.commit()
     except IntegrityError:
-        db.session.rollback()
+        db2.session.rollback()
         db_report = Report.query.filter_by(year=report.year, month=report.month,
                                            carrier_id=report.carrier_id, type=report.type).first()
         if db_report is not None:
             db_report.quantity = report.quantity
-            db.session.commit()
+            db2.session.commit()
 
 
 # Handles the ranking import reports
@@ -77,7 +81,7 @@ def ranking_import(data, year, month):
                                                          total_bytes=ranking_info["total_bytes"],
                                                          total_devices=ranking_info["total_devices"]))
     except IntegrityError:
-        db.session.rollback()
+        db2.session.rollback()
 
 
 def insert_or_update_ranking(ranking):
@@ -91,7 +95,132 @@ def insert_or_update_ranking(ranking):
         db_ranking.bytes_per_user = ranking.bytes_per_user
         db_ranking.total_devices = ranking.total_devices
         db_ranking.app_name = ranking.app_name
-        db.session.commit()
+        db2.session.commit()
     else:
-        db.session.add(ranking)
-        db.session.commit()
+        db2.session.add(ranking)
+        db2.session.commit()
+
+
+# Handles the signal reports (Named signal_report_month_year)
+def gsm_signal_import(signals, year, month):
+    carriers = Carrier.query.all()
+    carrierIds = [c.id for c in carriers]
+
+    try:
+        for signal in signals:
+            antenna_id = signal["antenna_id"]
+            carrier_id = signal["carrier_id"]
+            quantity = signal["observations"]
+            signal_mean = signal["signal_mean"]
+            antenna = Antenna2.query.get(signal["antenna_id"])
+
+            # We ignore the carriers that are not in our database
+            if carrier_id not in carrierIds:
+                continue
+
+            if not antenna:
+                try:
+                    ans = get_antenna(antenna_id)
+                    if ans == 'Antenna with no lat or lon' or ans is None:
+                        continue
+                except DifferentIdException:
+                    continue
+
+            insert_or_update_signal(GsmSignal(year=year, month=month, antenna_id=antenna_id,
+                                                  carrier_id=carrier_id, signal=signal_mean, quantity=quantity))
+
+    except IntegrityError:
+        db2.session.rollback()
+
+
+def insert_or_update_signal(signal):
+    try:
+        db2.session.add(signal)
+        db2.session.commit()
+    except IntegrityError:
+        db2.session.rollback()
+        db_signal = GsmSignal.query.filter_by(year=signal.year, month=signal.month,
+                                              carrier_id=signal.carrier_id,
+                                              antenna_id=signal.antenna_id).first()
+        if db_signal is not None:
+            db_signal.quantity = signal.quantity
+            db_signal.signal = signal.signal
+            db2.session.commit()
+
+
+def gsm_count_import(counts, year, month):
+    carriers = Carrier.query.all()
+    carrierIds = [c.id for c in carriers]
+    try:
+        for count in counts:
+            antenna_id = count["antenna_id"]
+            carrier_id = count["carrier_id"]
+            quantity = count["size"]
+            network_type = count["network_type"]
+            antenna = Antenna2.query.get(count["antenna_id"])
+
+            if carrier_id not in carrierIds:  # If carrier not in known carriers, we ignore it
+                continue
+
+            if not antenna:
+                try:
+                    ans = get_antenna(antenna_id)
+                    if ans == 'Antenna with no lat or lon' or ans is None:
+                        continue
+                except DifferentIdException:
+                    continue
+
+            insert_or_update_gsm_count(GsmCount(year=year, month=month, antenna_id=antenna_id,
+                                                    network_type=network_type, carrier_id=carrier_id,
+                                                    quantity=quantity))
+    except IntegrityError:
+        db2.session.rollback()
+
+
+def insert_or_update_gsm_count(gsm_count):
+    try:
+        db2.session.add(gsm_count)
+        db2.session.commit()
+    except IntegrityError:
+        db2.session.rollback()
+        db_count = GsmCount.query.filter_by(year=gsm_count.year, month=gsm_count.month,
+                                            carrier_id=gsm_count.carrier_id,
+                                            antenna_id=gsm_count.antenna_id,
+                                            network_type=gsm_count.network_type).first()
+        if db_count is not None:
+            db_count.quantity = gsm_count.quantity
+            db2.session.commit()
+
+
+def get_antenna(an_id):
+    with application1.app_context():
+        result = Antenna1.query.get(an_id)
+    carrier_id = result.carrier_id
+    cid = result.cid
+    lac = result.lac
+    lat = result.lat
+    lon = result.lon
+
+    # We add just the antennas that have known lat and lon
+    if lat is None or lon is None:
+        return 'Antenna with no lat or lon'
+
+    with application2.app_context():
+        db2.session.add(Antenna2(id=an_id, cid=cid, lac=lac, lat=lat, lon=lon, carrier_id=carrier_id))
+
+        try:
+            db2.session.commit()
+        except IntegrityError:
+            try:
+                db2.session.rollback()
+                antenna = Antenna2.query.filter_by(id=an_id).first()
+                antenna.lat = lat
+                antenna.lon = lon
+                db2.session.commit()
+            except:
+                raise DifferentIdException()
+    return Antenna2(id=an_id, cid=cid, lac=lac, lat=lat, lon=lon, carrier_id=carrier_id)
+
+
+class DifferentIdException(Exception):
+    pass

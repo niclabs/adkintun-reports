@@ -1,13 +1,13 @@
-from app import db
+from app import db2
 
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(100))
-    last_name = db.Column(db.String(100))
-    login = db.Column(db.String(80), unique=True)
-    email = db.Column(db.String(120))
-    password = db.Column(db.String(120))
+class User(db2.Model):
+    id = db2.Column(db2.Integer, primary_key=True)
+    first_name = db2.Column(db2.String(100))
+    last_name = db2.Column(db2.String(100))
+    login = db2.Column(db2.String(80), unique=True)
+    email = db2.Column(db2.String(120))
+    password = db2.Column(db2.String(120))
 
     # Flask-Login integration
     def is_authenticated(self):

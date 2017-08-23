@@ -1,4 +1,4 @@
-from app import db
+from app import db1
 from app.models_server.event import Event
 
 
@@ -9,10 +9,10 @@ class StateChangeEvent(Event):
     __tablename__ = 'state_change_events'
     __mapper_args__ = {'polymorphic_identity': 'state_change_event'}
 
-    id = db.Column(db.Integer, db.ForeignKey('events.id'), primary_key=True)
-    state_type = db.Column(db.Integer)
-    state = db.Column(db.Integer)
-    event_type = db.Column(db.Integer)
+    id = db1.Column(db1.Integer, db1.ForeignKey('events.id'), primary_key=True)
+    state_type = db1.Column(db1.Integer)
+    state = db1.Column(db1.Integer)
+    event_type = db1.Column(db1.Integer)
 
     def __init__(self, date=None, app_version_code=None, sim_serial_number=None, device_id=None, state_type=None,
                  state=None, event_type=None):

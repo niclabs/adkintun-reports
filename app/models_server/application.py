@@ -1,4 +1,4 @@
-from app import db, application
+from app import db1, application1
 from app.models_server import base_model
 
 
@@ -7,9 +7,9 @@ class Application(base_model.BaseModel):
     Android Apps model class
     """
     __tablename__ = "applications"
-    id = db.Column(db.Integer, primary_key=True)
-    package_name = db.Column(db.String(100), unique=True)
-    application_traffic_event = db.relationship("ApplicationTrafficEvent", backref="application", lazy="dynamic")
+    id = db1.Column(db1.Integer, primary_key=True)
+    package_name = db1.Column(db1.String(100), unique=True)
+    application_traffic_event = db1.relationship("ApplicationTrafficEvent", backref="application", lazy="dynamic")
 
     def __init__(self, package_name=None):
         self.package_name = package_name
@@ -27,11 +27,11 @@ class Application(base_model.BaseModel):
         app = Application.query.filter(Application.package_name == package_name).first()
         if not app:
             app = Application(package_name=package_name)
-            db.session.add(app)
+            db1.session.add(app)
             try:
-                db.session.commit()
+                db1.session.commit()
             except Exception as e:
-                db.session.rollback()
-                application.logger.error(
+                db1.session.rollback()
+                application1.logger.error(
                     "Error adding application to database, package_name:" + package_name + " - " + str(e))
         return app
