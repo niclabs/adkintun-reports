@@ -12,6 +12,8 @@ from app.models_server.gsm_event import GsmEvent
 from app.models_frontend.carrier import Carrier as Carrier2
 from app.models_frontend.report import Report
 
+from app.report.json_generation import save_json_report_to_file
+
 
 class TestGeneralReport(base_test.BaseTest):
 
