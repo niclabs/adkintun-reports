@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from app import reportLogger
 from app.report.json_generation import save_json_report_to_file
 
 from app.report.general_report_generation import general_report
@@ -64,16 +65,32 @@ def monthly_report_generation(month=None, year=None):
     init_date = datetime(year=year_new_report, month=month_new_report, day=1)
     last_date = datetime(year=final_year, month=final_month, day=1, hour=23, minute=59, second=59) - timedelta(days=1)
 
-    general = general_report(init_date, last_date)
-    save_json_report_to_file(general, init_date.year, init_date.month, 'general_report_')
+    try:
+        general = general_report(init_date, last_date)
+        save_json_report_to_file(general, init_date.year, init_date.month, 'general_report_')
+        reportLogger.info("General report for {}/{} has been generated").format(month, year)
+    except Exception as e:
+        reportLogger.info("General report generation failed:" + str(e))
 
-    app = app_report(init_date, last_date)
-    save_json_report_to_file(app, init_date.year, init_date.month, 'apps_report_')
+    try:
+        app = app_report(init_date, last_date)
+        save_json_report_to_file(app, init_date.year, init_date.month, 'apps_report_')
+        reportLogger.info("Apps report for {}/{} has been generated")
+    except Exception as e:
+        reportLogger.info("Apps report generation failed:" + str(e))
 
-    signal = signal_strength_mean_for_antenna(init_date, last_date)
-    save_json_report_to_file(signal, init_date.year, init_date.month, 'signal_report_')
+    try:
+        signal = signal_strength_mean_for_antenna(init_date, last_date)
+        save_json_report_to_file(signal, init_date.year, init_date.month, 'signal_report_')
+        reportLogger.info("Signal report for {}/{} has been generated")
+    except Exception as e:
+        reportLogger.info("Signal report generation failed:" + str(e))
 
-    network = network_report_for_carrier(init_date, last_date)
-    save_json_report_to_file(network, init_date.year, init_date.month, 'network_report_')
+    try:
+        network = network_report_for_carrier(init_date, last_date)
+        save_json_report_to_file(network, init_date.year, init_date.month, 'network_report_')
+        reportLogger.info("Network report for {}/{} has been generated")
+    except Exception as e:
+        reportLogger.info("Network report generation failed:" + str(e))
 
     return [general, app, signal, network]

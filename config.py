@@ -15,3 +15,5 @@ class Config2(object):
 class Files:
     STATIC_FILES_FOLDER = "app/static"
     REPORTS_FOLDER = STATIC_FILES_FOLDER + "/" + "reports"
+    LOGS_FOLDER = "tmp"
+    REPORTS_LOG_FILE = "report.log"

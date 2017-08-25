@@ -1,5 +1,5 @@
 import json
-from app import application1, application2, db2
+from app import application1, application2, db2, reportLogger
 from app.models_server.antenna import Antenna as Antenna1
 from app.models_frontend.antenna import Antenna as Antenna2
 from app.models_frontend.carrier import Carrier
@@ -12,6 +12,8 @@ from sqlalchemy.exc import IntegrityError
 
 # Handles the general report importation (Named general_report_month_year)
 def report_import(data, year, month):
+    reportLogger.info("Importing general report for {}/{}".format(month, year))
+
     carriers = Carrier.query.all()
     carrierIds = [c.id for c in carriers]
 
@@ -32,8 +34,11 @@ def report_import(data, year, month):
             else:
                 carrier_id = 0
                 insert_or_update_report(Report(year, month, report_type, carrier_id, element))
-    except IntegrityError:
+        reportLogger.info("Finished general report import for {}/{}".format(month, year))
+
+    except IntegrityError as e:
         db2.session.rollback()
+        reportLogger.error("Couldn't insert general report into db." + str(e))
 
 
 def insert_or_update_report(report):
@@ -51,6 +56,8 @@ def insert_or_update_report(report):
 
 # Handles the ranking import reports
 def ranking_import(data, year, month):
+    reportLogger.info("Importing application ranking report for {}/{}".format(month, year))
+
     carriers = Carrier.query.all()
     carrierIds = [c.id for c in carriers]
 
@@ -81,8 +88,10 @@ def ranking_import(data, year, month):
                                                          bytes_per_user=ranking_info["bytes_per_user"],
                                                          total_bytes=ranking_info["total_bytes"],
                                                          total_devices=ranking_info["total_devices"]))
-    except IntegrityError:
+        reportLogger.info("Finished application ranking report import for {}/{}".format(month, year))
+    except IntegrityError as e:
         db2.session.rollback()
+        reportLogger.error("Couldn't insert ranking into db." + str(e))
 
 
 def insert_or_update_ranking(ranking):
@@ -104,6 +113,8 @@ def insert_or_update_ranking(ranking):
 
 # Handles the signal reports (Named signal_report_month_year)
 def gsm_signal_import(signals, year, month):
+    reportLogger.info("Importing signal report for {}/{}".format(month, year))
+
     carriers = Carrier.query.all()
     carrierIds = [c.id for c in carriers]
 
@@ -128,10 +139,12 @@ def gsm_signal_import(signals, year, month):
                     continue
 
             insert_or_update_signal(GsmSignal(year=year, month=month, antenna_id=antenna_id,
-                                                  carrier_id=carrier_id, signal=signal_mean, quantity=quantity))
+                                              carrier_id=carrier_id, signal=signal_mean, quantity=quantity))
+        reportLogger.info("Finished signal report import for {}/{}".format(month, year))
 
-    except IntegrityError:
+    except IntegrityError as e:
         db2.session.rollback()
+        reportLogger.error("Couldn't insert signal into db." + str(e))
 
 
 def insert_or_update_signal(signal):
@@ -150,8 +163,11 @@ def insert_or_update_signal(signal):
 
 
 def gsm_count_import(counts, year, month):
+    reportLogger.info("Importing network report for {}/{}".format(month, year))
+
     carriers = Carrier.query.all()
     carrierIds = [c.id for c in carriers]
+
     try:
         for count in counts:
             antenna_id = count["antenna_id"]
@@ -172,10 +188,13 @@ def gsm_count_import(counts, year, month):
                     continue
 
             insert_or_update_gsm_count(GsmCount(year=year, month=month, antenna_id=antenna_id,
-                                                    network_type=network_type, carrier_id=carrier_id,
-                                                    quantity=quantity))
-    except IntegrityError:
+                                                network_type=network_type, carrier_id=carrier_id,
+                                                quantity=quantity))
+        reportLogger.info("Finished network report import for {}/{}".format(month, year))
+
+    except IntegrityError as e:
         db2.session.rollback()
+        reportLogger.error("Couldn't insert gsm_count into db. " + str(e))
 
 
 def insert_or_update_gsm_count(gsm_count):
@@ -224,6 +243,8 @@ def get_antenna(an_id):
 
 
 def refresh_materialized_views():
+    reportLogger.info("Refreshing materialized views")
+
     try:
         sql = 'REFRESH MATERIALIZED VIEW gsm_count_by_carrier'
         db2.engine.execute(sql)
@@ -234,6 +255,7 @@ def refresh_materialized_views():
 
 
 def refresh_antennas_json():
+    reportLogger.info("Refreshing antennas json")
     from app.models_frontend.network_type import NetworkType
     from sqlalchemy import func
     import os
@@ -241,7 +263,7 @@ def refresh_antennas_json():
         carriers = Carrier.query.all()
         carriers = ['0'] + [str(c.id) for c in carriers]
         for carrier in carriers:
-
+#            reportLogger.info("Refreshing antennas json for carrier {}".format(carrier))
             if carrier == '0':
                 query = GsmCount.query
             else:
@@ -280,8 +302,9 @@ def refresh_antennas_json():
                 os.makedirs(antennas_dir)
             with open("app/static/json/gsm_count/"+carrier+".json", "w") as jsonfile:
                     json.dump(antennas_info, jsonfile)
-    except Exception:
-        pass
+            reportLogger.info("Finished refreshing antennas json for carrier {}".format(carrier))
+    except Exception as e:
+        reportLogger.error("Couldn't refresh antennas json:" + str(e))
 
 
 class DifferentIdException(Exception):
