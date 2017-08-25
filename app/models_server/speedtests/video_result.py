@@ -1,5 +1,5 @@
-from app import db, application
-from app.models.base_model import BaseModel
+from app import db1, application1
+from app.models_server.base_model import BaseModel
 
 
 class VideoResult(BaseModel):
@@ -8,14 +8,14 @@ class VideoResult(BaseModel):
     '''
     __tablename__ = 'video_results'
 
-    id = db.Column(db.Integer, primary_key=True)
-    quality = db.Column(db.String(50))
-    buffering_time = db.Column(db.BigInteger)
-    loaded_fraction = db.Column(db.Float)
-    downloaded_bytes = db.Column(db.BigInteger)
+    id = db1.Column(db1.Integer, primary_key=True)
+    quality = db1.Column(db1.String(50))
+    buffering_time = db1.Column(db1.BigInteger)
+    loaded_fraction = db1.Column(db1.Float)
+    downloaded_bytes = db1.Column(db1.BigInteger)
 
     # relationships
-    media_test_report_id = db.Column(db.Integer, db.ForeignKey("media_test_reports.id"))
+    media_test_report_id = db1.Column(db1.Integer, db1.ForeignKey("media_test_reports.id"))
 
     def __init__(self, quality=None, buffering_time=None, loaded_fraction=None, downloaded_bytes=None):
         self.quality = quality
@@ -37,12 +37,12 @@ class VideoResult(BaseModel):
         if "downloaded_bytes" in args and "quality" in args and "buffering_time" in args and "loaded_fraction" in args:
             vr = VideoResult(quality=args["quality"], buffering_time=args["buffering_time"],
                              downloaded_bytes=args["downloaded_bytes"], loaded_fraction=args["loaded_fraction"])
-            db.session.add(vr)
+            db1.session.add(vr)
             try:
-                db.session.commit()
+                db1.session.commit()
             except Exception as e:
-                db.session.rollback()
-                application.logger.error("Error adding video result.")
+                db1.session.rollback()
+                application1.logger.error("Error adding video result.")
                 return None
             return vr
         else:

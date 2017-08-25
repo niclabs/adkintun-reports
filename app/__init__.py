@@ -1,17 +1,17 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from config import Config1, Config2
+from config import DefaultConfigServer, DefaultConfigFrontend
 from config import Files
 from logging.handlers import RotatingFileHandler
 import os
 import logging
 
 application1 = Flask(__name__)
-application1.config.from_object(Config1)
+application1.config.from_object(DefaultConfigServer)
 db1 = SQLAlchemy(application1)
 
 application2 = Flask(__name__)
-application2.config.from_object(Config2)
+application2.config.from_object(DefaultConfigFrontend)
 db2 = SQLAlchemy(application2)
 
 reportLogger = logging.getLogger(__name__)

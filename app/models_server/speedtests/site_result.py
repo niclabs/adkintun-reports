@@ -1,5 +1,5 @@
-from app import db, application
-from app.models.base_model import BaseModel
+from app import db1, application1
+from app.models_server.base_model import BaseModel
 
 
 class SiteResult(BaseModel):
@@ -8,14 +8,14 @@ class SiteResult(BaseModel):
     '''
     __tablename__ = 'site_results'
 
-    id = db.Column(db.Integer, primary_key=True)
-    url = db.Column(db.String(100))
-    loaded = db.Column(db.Boolean)
-    loading_time = db.Column(db.BigInteger)
-    downloaded_bytes = db.Column(db.BigInteger)
+    id = db1.Column(db1.Integer, primary_key=True)
+    url = db1.Column(db1.String(100))
+    loaded = db1.Column(db1.Boolean)
+    loading_time = db1.Column(db1.BigInteger)
+    downloaded_bytes = db1.Column(db1.BigInteger)
 
     # relationships
-    connectivity_test_report_id = db.Column(db.Integer, db.ForeignKey("connectivity_test_reports.id"))
+    connectivity_test_report_id = db1.Column(db1.Integer, db1.ForeignKey("connectivity_test_reports.id"))
 
     def __init__(self, url=None, loaded=None, loading_time=None, downloaded_bytes=None):
         self.url = url
@@ -36,12 +36,12 @@ class SiteResult(BaseModel):
         if "url" in args and "loading_time" in args and "downloaded_bytes" in args and "loaded" in args:
             sr = SiteResult(url=args["url"], loading_time=args["loading_time"],
                             downloaded_bytes=args["downloaded_bytes"], loaded=args["loaded"])
-            db.session.add(sr)
+            db1.session.add(sr)
             try:
-                db.session.commit()
+                db1.session.commit()
             except Exception as e:
-                db.session.rollback()
-                application.logger.error("Error adding site result, url:" + args["url"])
+                db1.session.rollback()
+                application1.logger.error("Error adding site result, url:" + args["url"])
                 return None
             return sr
         else:

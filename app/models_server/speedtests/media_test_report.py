@@ -1,5 +1,5 @@
-from app import db
-from app.models.speedtests.active_measurement import ActiveMeasurement
+from app import db1
+from app.models_server.speedtests.active_measurement import ActiveMeasurement
 
 
 class MediaTestReport(ActiveMeasurement):
@@ -8,11 +8,11 @@ class MediaTestReport(ActiveMeasurement):
     '''
     __tablename__ = "media_test_reports"
 
-    id = db.Column(db.Integer, db.ForeignKey("active_measurements.id"), primary_key=True)
-    video_id = db.Column(db.String(50))
+    id = db1.Column(db1.Integer, db1.ForeignKey("active_measurements.id"), primary_key=True)
+    video_id = db1.Column(db1.String(50))
 
     # Relationships
-    video_results = db.relationship("VideoResult", backref="media_test_report", lazy="dynamic")
+    video_results = db1.relationship("VideoResult", backref="media_test_report", lazy="dynamic")
 
     def __init__(self, network_interface_id=None, date=None, dispatched=None, video_id=None):
         self.network_interface_id = network_interface_id
