@@ -1,0 +1,1 @@
+from app.automatization.monthly_update import monthly_update
