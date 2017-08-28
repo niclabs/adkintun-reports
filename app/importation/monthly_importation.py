@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from app import application1, application2
 from app import reportLogger
 from app.report.json_generation import save_json_report_to_file
 
@@ -16,11 +17,21 @@ from app.importation.general_importation import refresh_antennas_json
 
 
 def monthly_update():
+    """
+    Method to be run at the start of every month.
+    :return:
+    """
     reports = monthly_report_generation()
     monthly_import(reports)
 
 
 def monthly_import(reports):
+    """
+    Receives the four reports as an array and tries to insert
+    them into the frontend database.
+    :param reports: An array containing reports as dictionaries.
+    :return:
+    """
     actual_month = datetime.now().month
     actual_year = datetime.now().year
     month_new_import = actual_month - 1
@@ -33,16 +44,24 @@ def monthly_import(reports):
     year = year_new_import
     month = month_new_import
 
-    report_import(reports[0], year, month)
-    ranking_import(reports[1], year, month)
-    gsm_signal_import(reports[2], year, month)
-    gsm_count_import(reports[3], year, month)
+    with application2.app_context():
+        report_import(reports[0], year, month)
+        ranking_import(reports[1], year, month)
+        gsm_signal_import(reports[2], year, month)
+        gsm_count_import(reports[3], year, month)
 
-    refresh_materialized_views()
-    refresh_antennas_json()
+        refresh_materialized_views()
+        refresh_antennas_json()
 
 
 def monthly_report_generation(month=None, year=None):
+    """
+    Generates four reports in a dictionary format and
+    saves them as json files.
+    :param month: Month number (1-12)
+    :param year: Year number, four digits.
+    :return: Array containing the reports.
+    """
     # get month for the report, not added month or year
     if not month or not year:
         final_month = datetime.now().month
@@ -65,32 +84,33 @@ def monthly_report_generation(month=None, year=None):
     init_date = datetime(year=year_new_report, month=month_new_report, day=1)
     last_date = datetime(year=final_year, month=final_month, day=1, hour=23, minute=59, second=59) - timedelta(days=1)
 
-    try:
-        general = general_report(init_date, last_date)
-        save_json_report_to_file(general, init_date.year, init_date.month, 'general_report_')
-        reportLogger.info("General report for {}/{} has been generated".format(month_new_report, year_new_report))
-    except Exception as e:
-        reportLogger.info("General report generation failed:" + str(e))
+    with application1.app_context():
+        try:
+            general = general_report(init_date, last_date)
+            save_json_report_to_file(general, init_date.year, init_date.month, 'general_report_')
+            reportLogger.info("General report for {}/{} has been generated".format(month_new_report, year_new_report))
+        except Exception as e:
+            reportLogger.info("General report generation failed:" + str(e))
 
-    try:
-        app = app_report(init_date, last_date)
-        save_json_report_to_file(app, init_date.year, init_date.month, 'apps_report_')
-        reportLogger.info("Apps report for {}/{} has been generated".format(month_new_report, year_new_report))
-    except Exception as e:
-        reportLogger.info("Apps report generation failed:" + str(e))
+        try:
+            app = app_report(init_date, last_date)
+            save_json_report_to_file(app, init_date.year, init_date.month, 'apps_report_')
+            reportLogger.info("Apps report for {}/{} has been generated".format(month_new_report, year_new_report))
+        except Exception as e:
+            reportLogger.info("Apps report generation failed:" + str(e))
 
-    try:
-        signal = signal_strength_mean_for_antenna(init_date, last_date)
-        save_json_report_to_file(signal, init_date.year, init_date.month, 'signal_report_')
-        reportLogger.info("Signal report for {}/{} has been generated".format(month_new_report, year_new_report))
-    except Exception as e:
-        reportLogger.info("Signal report generation failed:" + str(e))
+        try:
+            signal = signal_strength_mean_for_antenna(init_date, last_date)
+            save_json_report_to_file(signal, init_date.year, init_date.month, 'signal_report_')
+            reportLogger.info("Signal report for {}/{} has been generated".format(month_new_report, year_new_report))
+        except Exception as e:
+            reportLogger.info("Signal report generation failed:" + str(e))
 
-    try:
-        network = network_report_for_carrier(init_date, last_date)
-        save_json_report_to_file(network, init_date.year, init_date.month, 'network_report_')
-        reportLogger.info("Network report for {}/{} has been generated".format(month_new_report, year_new_report))
-    except Exception as e:
-        reportLogger.info("Network report generation failed:" + str(e))
+        try:
+            network = network_report_for_carrier(init_date, last_date)
+            save_json_report_to_file(network, init_date.year, init_date.month, 'network_report_')
+            reportLogger.info("Network report for {}/{} has been generated".format(month_new_report, year_new_report))
+        except Exception as e:
+            reportLogger.info("Network report generation failed:" + str(e))
 
     return [general, app, signal, network]
