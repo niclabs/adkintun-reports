@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 from app import application1, application2, db1, db2
 from test import base_test
-from app.report.network_report_generation import network_report_for_carrier
-from app.importation.general_importation import gsm_count_import
+from app.report import network_report_for_carrier
+from app.importation import gsm_count_import
 
 from app.models_server.sim import Sim
 from app.models_server.carrier import Carrier

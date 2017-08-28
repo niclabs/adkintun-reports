@@ -1,8 +1,8 @@
 from datetime import datetime
 from app import application1, application2, db1, db2
 from test import base_test
-from app.report.app_report_generation import app_report
-from app.importation.general_importation import ranking_import
+from app.report import app_report
+from app.importation import ranking_import
 
 from app.models_server.device import Device
 from app.models_server.sim import Sim

@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 from app import application1, application2, db1, db2
 from test import base_test
-from app.report.signal_report_generation import signal_strength_mean_for_antenna
-from app.importation.general_importation import gsm_signal_import
+from app.report import signal_strength_mean_for_antenna
+from app.importation import gsm_signal_import
 
 from app.models_server.carrier import Carrier
 from app.models_server.sim import Sim

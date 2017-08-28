@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 from app import application1, application2, db1, db2
 from test import base_test
-from app.report.general_report_generation import general_report
-from app.importation.general_importation import report_import
+from app.report import general_report
+from app.importation import report_import
 
 from app.models_server.device import Device
 from app.models_server.sim import Sim

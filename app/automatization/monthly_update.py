@@ -3,17 +3,17 @@ from app import application1, application2
 from app import reportLogger
 from app.report.json_generation import save_json_report_to_file
 
-from app.report.general_report_generation import general_report
-from app.report.app_report_generation import app_report
-from app.report.signal_report_generation import signal_strength_mean_for_antenna
-from app.report.network_report_generation import network_report_for_carrier
+from app.report import general_report
+from app.report import app_report
+from app.report import signal_strength_mean_for_antenna
+from app.report import network_report_for_carrier
 
-from app.importation.general_importation import report_import
-from app.importation.general_importation import ranking_import
-from app.importation.general_importation import gsm_signal_import
-from app.importation.general_importation import gsm_count_import
-from app.importation.general_importation import refresh_materialized_views
-from app.importation.general_importation import refresh_antennas_json
+from app.importation import report_import
+from app.importation import ranking_import
+from app.importation import gsm_signal_import
+from app.importation import gsm_count_import
+from app.importation import refresh_materialized_views
+from app.importation import refresh_antennas_json
 
 
 def monthly_update():
