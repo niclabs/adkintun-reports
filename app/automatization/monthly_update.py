@@ -84,6 +84,11 @@ def monthly_report_generation(month=None, year=None):
     init_date = datetime(year=year_new_report, month=month_new_report, day=1)
     last_date = datetime(year=final_year, month=final_month, day=1, hour=23, minute=59, second=59) - timedelta(days=1)
 
+    general = None
+    app = None
+    signal = None
+    network = None
+
     with application1.app_context():
         try:
             general = general_report(init_date, last_date)
