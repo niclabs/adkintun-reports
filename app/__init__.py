@@ -8,8 +8,6 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 
-from app.automatization.scheduler_manager import start_scheduler
-
 # creates app1 with access to the server database
 application1 = Flask(__name__)
 application1.config.from_object(DefaultConfigServer)
@@ -36,4 +34,11 @@ reportLogger.addHandler(file_handler)
 reportLogger.info("Report log start")
 
 # starts scheduler for monthly update
-start_scheduler()
+# start uwsgi cron jobs for monthly update
+# Just run in a uwsgi instance!
+try:
+    import app.automatization.scheduler_manager
+
+    reportLogger.info("Uwsgi mules created for monthly update")
+except:
+    reportLogger.error("Problem with the mules")
