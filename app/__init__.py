@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_autoindex import AutoIndex
 
 from config import DefaultConfigServer, DefaultConfigFrontend
 from config import Files
@@ -32,6 +33,13 @@ reportLogger.setLevel(logging.INFO)
 file_handler.setLevel(logging.INFO)
 reportLogger.addHandler(file_handler)
 reportLogger.info("Report log start")
+
+# Listing reports directory
+autoindex = AutoIndex(application1, browse_root=Files.REPORTS_FOLDER, add_url_rules=False)
+
+# import views
+from app.report import views
+from app.public import views
 
 # starts scheduler for monthly update
 # start uwsgi cron jobs for monthly update

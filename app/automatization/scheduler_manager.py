@@ -17,4 +17,4 @@ def reports_generation(num: int):
     :return:
     """
     monthly_update()
-    reportLogger.info(datetime.now().strftime("Reports has been generated. - %H:%M %d/%m/%Y"))
+    reportLogger.info(datetime.now().strftime("Reports have been generated. - %H:%M %d/%m/%Y"))
