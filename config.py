@@ -2,9 +2,11 @@ class DefaultConfigServer(object):
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
-    SECRET_KEY = "this-really-needs-to-be-changed"
-    USER = "this-really-needs-to-be-changed"
-    SQLALCHEMY_DATABASE_URI = "postgresql://" + USER + ":" + SECRET_KEY + "@localhost/this-really-needs-to-be-changed"
+    SECRET_KEY = "this-should-be-changed"
+    USER = "this-should-be-changed"
+    HOST = "this-should-be-changed"
+    DB_NAME = "this-should-be-changed"
+    SQLALCHEMY_DATABASE_URI = "postgresql://{}:{}@{}/{}".format(USER, SECRET_KEY, HOST, DB_NAME)
     SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 
@@ -15,9 +17,9 @@ class DefaultConfigFrontend(object):
     SECRET_KEY = "this-should-be-changed"
     USER = "this-should-be-changed"
     HOST = "this-should-be-changed"
-    SQLALCHEMY_DATABASE_URI = "postgresql://{}:{}@{}/visualization".format(USER, SECRET_KEY, HOST)
+    DB_NAME = "this-should-be-changed"
+    SQLALCHEMY_DATABASE_URI = "postgresql://{}:{}@{}/{}".format(USER, SECRET_KEY, HOST, DB_NAME)
     SQLALCHEMY_TRACK_MODIFICATIONS = True
-    CORS_DOMAIN = 'this-should-be-changed'  # Set to visualization server ip or '*' for all
 
 
 class TestConfigServer(object):
