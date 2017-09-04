@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from app import application1, application2, db1, db2
+from app import application, db1, db2
 from test import base_test
 from app.report import general_report
 from app.importation import report_import
@@ -62,7 +62,7 @@ class TestGeneralReport(base_test.BaseTest):
         db1.session.commit()
 
     def test_report_generation(self):
-        with application1.app_context():
+        with application.app_context():
 
             self.populate()
             report = general_report(datetime.now() + timedelta(days=-1), None)
@@ -92,12 +92,10 @@ class TestGeneralReport(base_test.BaseTest):
         self.assertEqual(report['total_gsm_carrier_of_period']['1002'], 1)
 
     def test_report_importation(self):
-        with application1.app_context():
+        with application.app_context():
 
             self.populate()
             report = general_report(datetime.now() + timedelta(days=-1), None)
-
-        with application2.app_context():
 
             carrier1_frontend = Carrier2(name="test_carrier_1")
             carrier2_frontend = Carrier2(name="test_carrier_2")

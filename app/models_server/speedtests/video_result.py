@@ -1,4 +1,4 @@
-from app import db1, application1
+from app import db1, application
 from app.models_server.base_model import BaseModel
 
 
@@ -42,7 +42,7 @@ class VideoResult(BaseModel):
                 db1.session.commit()
             except Exception as e:
                 db1.session.rollback()
-                application1.logger.error("Error adding video result.")
+                application.logger.error("Error adding video result.")
                 return None
             return vr
         else:

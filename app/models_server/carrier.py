@@ -1,6 +1,6 @@
 from typing import TypeVar
 
-from app import db1, application1
+from app import db1, application
 from app.models_server import base_model
 
 class Carrier(base_model.BaseModel):
@@ -53,7 +53,7 @@ class Carrier(base_model.BaseModel):
             db1.session.commit()
         except Exception as e:
             db1.session.rollback()
-            application1.logger.error(
+            application.logger.error(
                 "Error adding new carrier, mnc:" + str(mnc) + ", mcc: " + str(mcc) + " - " + str(e))
 
     @staticmethod
@@ -68,7 +68,7 @@ class Carrier(base_model.BaseModel):
             carrier = Carrier.query.filter(Carrier.mnc == mnc, Carrier.mcc == mcc).first()
             if not carrier:
                 Carrier.add_new_carrier(mnc, mcc)
-                application1.logger.info("New carrier added: mnc:" + str(mnc) + ", mcc: " + str(mcc))
+                application.logger.info("New carrier added: mnc:" + str(mnc) + ", mcc: " + str(mcc))
                 carrier = Carrier.query.filter(Carrier.mnc == mnc, Carrier.mcc == mcc).first()
             return carrier
         else:

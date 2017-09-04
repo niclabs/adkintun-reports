@@ -1,4 +1,4 @@
-from app import db1, application1
+from app import db1, application
 from app.models_server.base_model import BaseModel
 
 
@@ -41,7 +41,7 @@ class SiteResult(BaseModel):
                 db1.session.commit()
             except Exception as e:
                 db1.session.rollback()
-                application1.logger.error("Error adding site result, url:" + args["url"])
+                application.logger.error("Error adding site result, url:" + args["url"])
                 return None
             return sr
         else:

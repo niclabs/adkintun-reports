@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_autoindex import AutoIndex
 
-from config import DefaultConfigServer, DefaultConfigFrontend
+from config import DefaultConfig
 from config import Files
 
 import logging
@@ -10,14 +10,10 @@ from logging.handlers import RotatingFileHandler
 import os
 
 # creates app1 with access to the server database
-application1 = Flask(__name__)
-application1.config.from_object(DefaultConfigServer)
-db1 = SQLAlchemy(application1)
-
-# creates app2 with access to the frontend database
-application2 = Flask(__name__)
-application2.config.from_object(DefaultConfigFrontend)
-db2 = SQLAlchemy(application2)
+application = Flask(__name__)
+application.config.from_object(DefaultConfig)
+db1 = SQLAlchemy(application)
+db2 = SQLAlchemy(application)
 
 # creates logger
 reportLogger = logging.getLogger(__name__)
@@ -35,11 +31,11 @@ reportLogger.addHandler(file_handler)
 reportLogger.info("Report log start")
 
 # Listing reports directory
-autoindex = AutoIndex(application1, browse_root=Files.REPORTS_FOLDER, add_url_rules=False)
+autoindex = AutoIndex(application, browse_root=Files.REPORTS_FOLDER, add_url_rules=False)
 
 # import views
-from app.report import views
-from app.public import views
+# from app.report import views
+# from app.public import views
 
 # starts scheduler for monthly update
 # start uwsgi cron jobs for monthly update

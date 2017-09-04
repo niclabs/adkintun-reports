@@ -1,4 +1,4 @@
-from app import db1, application1
+from app import db1, application
 from app.models_server import base_model
 
 
@@ -32,6 +32,6 @@ class Application(base_model.BaseModel):
                 db1.session.commit()
             except Exception as e:
                 db1.session.rollback()
-                application1.logger.error(
+                application.logger.error(
                     "Error adding application to database, package_name:" + package_name + " - " + str(e))
         return app

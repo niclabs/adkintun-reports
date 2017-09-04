@@ -1,6 +1,6 @@
 from sqlalchemy import UniqueConstraint
 
-from app import db1, application1
+from app import db1, application
 from app.models_server import base_model
 
 
@@ -56,11 +56,11 @@ class Antenna(base_model.BaseModel):
                 db1.session.add(antenna)
                 try:
                     db1.session.commit()
-                    application1.logger.info(
+                    application.logger.info(
                         "New antenna added: lac:" + str(lac) + ", cid:" + str(cid) + ", carrier_id:" + str(carrier.id))
                 except Exception as e:
                     db1.session.rollback()
-                    application1.logger.error("Error adding antenna to database: lac:" + str(lac) + ", cid:" + str(
+                    application.logger.error("Error adding antenna to database: lac:" + str(lac) + ", cid:" + str(
                         cid) + ", carrier_id:" + str(carrier.id) + "-" + str(e))
             return antenna
         else:

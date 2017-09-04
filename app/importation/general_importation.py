@@ -1,5 +1,5 @@
 import json
-from app import application1, application2, db2, reportLogger
+from app import db2, reportLogger
 from app.models_server.antenna import Antenna as Antenna1
 from app.models_frontend.antenna import Antenna as Antenna2
 from app.models_frontend.carrier import Carrier
@@ -213,8 +213,7 @@ def insert_or_update_gsm_count(gsm_count):
 
 
 def get_antenna(an_id):
-    with application1.app_context():
-        result = Antenna1.query.get(an_id)
+    result = Antenna1.query.get(an_id)
     carrier_id = result.carrier_id
     cid = result.cid
     lac = result.lac
@@ -225,20 +224,20 @@ def get_antenna(an_id):
     if lat is None or lon is None:
         return 'Antenna with no lat or lon'
 
-    with application2.app_context():
-        db2.session.add(Antenna2(id=an_id, cid=cid, lac=lac, lat=lat, lon=lon, carrier_id=carrier_id))
 
+    db2.session.add(Antenna2(id=an_id, cid=cid, lac=lac, lat=lat, lon=lon, carrier_id=carrier_id))
+
+    try:
+        db2.session.commit()
+    except IntegrityError:
         try:
+            db2.session.rollback()
+            antenna = Antenna2.query.filter_by(id=an_id).first()
+            antenna.lat = lat
+            antenna.lon = lon
             db2.session.commit()
-        except IntegrityError:
-            try:
-                db2.session.rollback()
-                antenna = Antenna2.query.filter_by(id=an_id).first()
-                antenna.lat = lat
-                antenna.lon = lon
-                db2.session.commit()
-            except:
-                raise DifferentIdException()
+        except:
+            raise DifferentIdException()
     return Antenna2(id=an_id, cid=cid, lac=lac, lat=lat, lon=lon, carrier_id=carrier_id)
 
 

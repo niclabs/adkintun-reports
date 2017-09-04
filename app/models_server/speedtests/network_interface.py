@@ -1,4 +1,4 @@
-from app import db1, application1
+from app import db1, application
 from app.models_server.base_model import BaseModel
 
 
@@ -53,7 +53,7 @@ class NetworkInterface(BaseModel):
                 db1.session.commit()
             except Exception as e:
                 db1.session.rollback()
-                application1.logger.error("Error adding network interface, network type:" + args["network_type"])
+                application.logger.error("Error adding network interface, network type:" + args["network_type"])
                 return None
             return ni
         else:

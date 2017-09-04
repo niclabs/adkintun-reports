@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from app import application1, application2, db1, db2
+from app import application, db1, db2
 from test import base_test
 from app.report import signal_strength_mean_for_antenna
 from app.importation import gsm_signal_import
@@ -61,7 +61,7 @@ class TestSignalReport(base_test.BaseTest):
         db1.session.commit()
 
     def test_report_generation(self):
-        with application1.app_context():
+        with application.app_context():
             self.populate()
             report = signal_strength_mean_for_antenna()
 
@@ -86,10 +86,10 @@ class TestSignalReport(base_test.BaseTest):
         self.assertAlmostEqual(report[2]['signal_mean'], 38.75206, places=5)
 
     def test_report_importation(self):
-        with application1.app_context():
+        with application.app_context():
             self.populate()
             report = signal_strength_mean_for_antenna()
-        with application2.app_context():
+
             carrier1_frontend = Carrier2(name="test_carrier_1")
             carrier2_frontend = Carrier2(name="test_carrier_2")
             carrier1_frontend.id = 1000

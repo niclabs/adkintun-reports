@@ -6,7 +6,6 @@ from sqlalchemy.dialects.postgresql import JSON
 
 class Ranking(base_model.BaseModel):
     __tablename__ = 'ranking'
-
     id = db2.Column(db2.Integer, primary_key=True, unique=True)
     year = db2.Column(db2.Integer)
     month = db2.Column(db2.Integer)

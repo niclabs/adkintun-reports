@@ -1,4 +1,4 @@
-from app import db1, application1
+from app import db1, application
 from app.models_server import base_model
 from app.models_server.device_sim import devices_sims
 
@@ -42,7 +42,7 @@ class Sim(base_model.BaseModel):
                     db1.session.commit()
                 except Exception as e:
                     db1.session.rollback()
-                    application1.logger.error(
+                    application.logger.error(
                         "Error adding new sim, serial_number:" + str(sim.serial_number) + "-" + str(e))
             return sim
         else:

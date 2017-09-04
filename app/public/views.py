@@ -1,6 +1,6 @@
 from flask import render_template, json, jsonify, redirect
 
-from app import application1
+from app import application
 
 """
 @application1.route("/")
@@ -9,7 +9,7 @@ def index():
 """
 
 
-@application1.errorhandler(404)
+@application.errorhandler(404)
 def page_not_found(error):
     return render_template("page_not_found.html"), 404
 

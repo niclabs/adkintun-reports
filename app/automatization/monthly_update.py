@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from app import application1, application2
 from app import reportLogger
 from app.report.json_generation import save_json_report_to_file
 
@@ -44,14 +43,13 @@ def monthly_import(reports):
     year = year_new_import
     month = month_new_import
 
-    with application2.app_context():
-        report_import(reports[0], year, month)
-        ranking_import(reports[1], year, month)
-        gsm_signal_import(reports[2], year, month)
-        gsm_count_import(reports[3], year, month)
+    report_import(reports[0], year, month)
+    ranking_import(reports[1], year, month)
+    gsm_signal_import(reports[2], year, month)
+    gsm_count_import(reports[3], year, month)
 
-        refresh_materialized_views()
-        refresh_antennas_json()
+    refresh_materialized_views()
+    refresh_antennas_json()
 
 
 def monthly_report_generation(month=None, year=None):
@@ -89,33 +87,32 @@ def monthly_report_generation(month=None, year=None):
     signal = None
     network = None
 
-    with application1.app_context():
-        try:
-            general = general_report(init_date, last_date)
-            save_json_report_to_file(general, init_date.year, init_date.month, 'general_report_')
-            reportLogger.info("General report for {}/{} has been generated".format(month_new_report, year_new_report))
-        except Exception as e:
-            reportLogger.info("General report generation failed:" + str(e))
+    try:
+        general = general_report(init_date, last_date)
+        save_json_report_to_file(general, init_date.year, init_date.month, 'general_report_')
+        reportLogger.info("General report for {}/{} has been generated".format(month_new_report, year_new_report))
+    except Exception as e:
+        reportLogger.info("General report generation failed:" + str(e))
 
-        try:
-            app = app_report(init_date, last_date)
-            save_json_report_to_file(app, init_date.year, init_date.month, 'apps_report_')
-            reportLogger.info("Apps report for {}/{} has been generated".format(month_new_report, year_new_report))
-        except Exception as e:
-            reportLogger.info("Apps report generation failed:" + str(e))
+    try:
+        app = app_report(init_date, last_date)
+        save_json_report_to_file(app, init_date.year, init_date.month, 'apps_report_')
+        reportLogger.info("Apps report for {}/{} has been generated".format(month_new_report, year_new_report))
+    except Exception as e:
+        reportLogger.info("Apps report generation failed:" + str(e))
 
-        try:
-            signal = signal_strength_mean_for_antenna(init_date, last_date)
-            save_json_report_to_file(signal, init_date.year, init_date.month, 'signal_report_')
-            reportLogger.info("Signal report for {}/{} has been generated".format(month_new_report, year_new_report))
-        except Exception as e:
-            reportLogger.info("Signal report generation failed:" + str(e))
+    try:
+        signal = signal_strength_mean_for_antenna(init_date, last_date)
+        save_json_report_to_file(signal, init_date.year, init_date.month, 'signal_report_')
+        reportLogger.info("Signal report for {}/{} has been generated".format(month_new_report, year_new_report))
+    except Exception as e:
+        reportLogger.info("Signal report generation failed:" + str(e))
 
-        try:
-            network = network_report_for_carrier(init_date, last_date)
-            save_json_report_to_file(network, init_date.year, init_date.month, 'network_report_')
-            reportLogger.info("Network report for {}/{} has been generated".format(month_new_report, year_new_report))
-        except Exception as e:
-            reportLogger.info("Network report generation failed:" + str(e))
+    try:
+        network = network_report_for_carrier(init_date, last_date)
+        save_json_report_to_file(network, init_date.year, init_date.month, 'network_report_')
+        reportLogger.info("Network report for {}/{} has been generated".format(month_new_report, year_new_report))
+    except Exception as e:
+        reportLogger.info("Network report generation failed:" + str(e))
 
     return [general, app, signal, network]

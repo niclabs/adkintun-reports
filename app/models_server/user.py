@@ -1,6 +1,7 @@
 from app import db1
 
 class User(db1.Model):
+    __bind_key__ = "everything"
     id = db1.Column(db1.Integer, primary_key=True)
     first_name = db1.Column(db1.String(100))
     last_name = db1.Column(db1.String(100))

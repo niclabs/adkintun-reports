@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from app import application1, application2, db1, db2
+from app import application, db1, db2
 from test import base_test
 from app.report import network_report_for_carrier
 from app.importation import gsm_count_import
@@ -66,40 +66,41 @@ class TestNetworkReport(base_test.BaseTest):
         db1.session.commit()
 
     def test_report_generation(self):
-        with application1.app_context():
+        with application.app_context():
             self.populate()
             report = network_report_for_carrier()
-            self.assertEqual(len(report), 4)
 
-            # carrier_1, on antenna_2, on wifi
-            self.assertEqual(report[0]['carrier_id'], 1000)
-            self.assertEqual(report[0]['antenna_id'], 1000)
-            self.assertEqual(report[0]['network_type'], 6)
-            self.assertEqual(report[0]['size'], 1)
+        self.assertEqual(len(report), 4)
 
-            # carrier_1, on antenna_1, on mobile
-            self.assertEqual(report[1]['carrier_id'], 1000)
-            self.assertEqual(report[1]['antenna_id'], 1337)
-            self.assertEqual(report[1]['network_type'], 1)
-            self.assertEqual(report[1]['size'], 2)
+        # carrier_1, on antenna_2, on wifi
+        self.assertEqual(report[0]['carrier_id'], 1000)
+        self.assertEqual(report[0]['antenna_id'], 1000)
+        self.assertEqual(report[0]['network_type'], 6)
+        self.assertEqual(report[0]['size'], 1)
 
-            # carrier_2, on antenna_1, on mobile
-            self.assertEqual(report[2]['carrier_id'], 1001)
-            self.assertEqual(report[2]['antenna_id'], 1337)
-            self.assertEqual(report[2]['network_type'], 1)
-            self.assertEqual(report[2]['size'], 1)
+        # carrier_1, on antenna_1, on mobile
+        self.assertEqual(report[1]['carrier_id'], 1000)
+        self.assertEqual(report[1]['antenna_id'], 1337)
+        self.assertEqual(report[1]['network_type'], 1)
+        self.assertEqual(report[1]['size'], 2)
 
-            # carrier_1, on antenna_2, on mobile
-            self.assertEqual(report[3]['carrier_id'], 1000)
-            self.assertEqual(report[3]['antenna_id'], 1000)
-            self.assertEqual(report[3]['network_type'], 1)
-            self.assertEqual(report[3]['size'], 1)
+        # carrier_2, on antenna_1, on mobile
+        self.assertEqual(report[2]['carrier_id'], 1001)
+        self.assertEqual(report[2]['antenna_id'], 1337)
+        self.assertEqual(report[2]['network_type'], 1)
+        self.assertEqual(report[2]['size'], 1)
+
+        # carrier_1, on antenna_2, on mobile
+        self.assertEqual(report[3]['carrier_id'], 1000)
+        self.assertEqual(report[3]['antenna_id'], 1000)
+        self.assertEqual(report[3]['network_type'], 1)
+        self.assertEqual(report[3]['size'], 1)
 
     def test_report_importation(self):
-        with application1.app_context():
+        with application.app_context():
             self.populate()
             report = network_report_for_carrier()
-        with application2.app_context():
+
             carrier1_frontend = Carrier2(name="test_carrier_1")
             carrier2_frontend = Carrier2(name="test_carrier_2")
             carrier1_frontend.id = 1000

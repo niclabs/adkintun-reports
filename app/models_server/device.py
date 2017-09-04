@@ -1,4 +1,4 @@
-from app import db1, application1
+from app import db1, application
 from app.models_server import base_model
 
 
@@ -70,7 +70,7 @@ class Device(base_model.BaseModel):
                     db1.session.commit()
                 except Exception as e:
                     db1.session.rollback()
-                    application1.logger.error("Error adding device to database - " + str(e))
+                    application.logger.error("Error adding device to database - " + str(e))
             return device
         else:
             return None

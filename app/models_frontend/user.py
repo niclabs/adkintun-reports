@@ -2,6 +2,7 @@ from app import db2
 
 
 class User(db2.Model):
+    __bind_key__ = 'nothing'
     id = db2.Column(db2.Integer, primary_key=True)
     first_name = db2.Column(db2.String(100))
     last_name = db2.Column(db2.String(100))
