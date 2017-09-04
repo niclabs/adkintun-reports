@@ -9,7 +9,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 
-# creates app1 with access to the server database
+# creates application and both database objects
 application = Flask(__name__)
 application.config.from_object(DefaultConfig)
 db1 = SQLAlchemy(application)
