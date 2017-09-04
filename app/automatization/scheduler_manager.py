@@ -10,10 +10,9 @@ MAX_NUMBER_OF_QUERIES = 40
 
 # Job will be done the first day of every month
 @cron(0, 0, 1, -1, -1, target="mule")
-def reports_generation(num: int):
+def reports_generation():
     """
     Job updating frontend database and generating reports.
-    :param num: singal num
     :return:
     """
     monthly_update()
