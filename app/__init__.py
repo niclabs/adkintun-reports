@@ -34,8 +34,8 @@ reportLogger.info("Report log start")
 autoindex = AutoIndex(application, browse_root=Files.REPORTS_FOLDER, add_url_rules=False)
 
 # import views
-# from app.report import views
-# from app.public import views
+from app.report import views
+from app.public import views
 
 # starts scheduler for monthly update
 # start uwsgi cron jobs for monthly update
