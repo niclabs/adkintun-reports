@@ -1,6 +1,7 @@
 Flask
+Flask-AutoIndex
 Flask-SQLAlchemy
 psycopg2
 SQLAlchemy
-uWSGI
-
+uwsgidecorators
+Werkzeug
