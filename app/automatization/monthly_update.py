@@ -15,12 +15,12 @@ from app.importation import refresh_materialized_views
 from app.importation import refresh_antennas_json
 
 
-def monthly_update():
+def monthly_update(month=None, year=None):
     """
     Method to be run at the start of every month.
     :return:
     """
-    reports = monthly_report_generation()
+    reports = monthly_reports_generation(month, year)
     monthly_import(reports)
 
 
@@ -52,7 +52,7 @@ def monthly_import(reports):
     refresh_antennas_json()
 
 
-def monthly_report_generation(month=None, year=None):
+def monthly_reports_generation(month=None, year=None):
     """
     Generates four reports in a dictionary format and
     saves them as json files.
