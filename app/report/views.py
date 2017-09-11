@@ -8,8 +8,8 @@ from app.public.views import page_not_found
 # listing reports folder
 # NOT AUTHORIZATION REQUIRED
 
-@application.route("/reports/")
-@application.route("/reports/<path:path>")
+@application.route("/")
+@application.route("/<path:path>")
 def reports(path=""):
     return autoindex.render_autoindex(path=path, endpoint="reports", mimetype="application/json")
 
