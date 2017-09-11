@@ -1,5 +1,7 @@
 Flask
 Flask-AutoIndex
+Flask-Script
+Flask-Silk
 Flask-SQLAlchemy
 psycopg2
 SQLAlchemy
