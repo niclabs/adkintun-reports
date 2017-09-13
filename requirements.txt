@@ -5,4 +5,4 @@ Flask-Silk
 Flask-SQLAlchemy
 psycopg2
 SQLAlchemy
-uwsgidecorators
+uwsgi
