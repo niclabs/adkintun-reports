@@ -3,29 +3,34 @@ from datetime import datetime
 from sqlalchemy import text
 
 
-def general_report(init_date, last_date):
+def general_report(min_date=datetime(2015, 1, 1), max_date=None):
     """
     Calculate the report values and return a dictionary.
     :return: a dictionary with summarized data.
     """
+    if not min_date:
+        min_date = datetime(2015, 1, 1)
 
-    total_devices_of_period = total_devices_registered(init_date, last_date)
-    total_devices = total_devices_registered(max_date=last_date)
+    if not max_date:
+        max_date = datetime.now()
 
-    total_sims_of_period = total_sims_registered(init_date, last_date)
-    total_sims = total_sims_registered(max_date=last_date)
+    total_devices_of_period = total_devices_registered(min_date, max_date)
+    total_devices = total_devices_registered(max_date=max_date)
 
-    total_gsm_of_period = total_gsm_events(init_date, last_date)
-    total_gsm = total_gsm_events(max_date=last_date)
+    total_sims_of_period = total_sims_registered(min_date, max_date)
+    total_sims = total_sims_registered(max_date=max_date)
 
-    total_device_carrier_of_period = total_device_for_carrier(init_date, last_date)
-    total_device_carrier = total_device_for_carrier(max_date=last_date)
+    total_gsm_of_period = total_gsm_events(min_date, max_date)
+    total_gsm = total_gsm_events(max_date=max_date)
 
-    total_sims_carrier_of_period = total_sims_for_carrier(init_date, last_date)
-    total_sims_carrier = total_sims_for_carrier(max_date=last_date)
+    total_device_carrier_of_period = total_device_for_carrier(min_date, max_date)
+    total_device_carrier = total_device_for_carrier(max_date=max_date)
 
-    total_gsm_carrier_of_period = total_gsm_events_for_carrier(init_date, last_date)
-    total_gsm_carrier = total_gsm_events_for_carrier(max_date=last_date)
+    total_sims_carrier_of_period = total_sims_for_carrier(min_date, max_date)
+    total_sims_carrier = total_sims_for_carrier(max_date=max_date)
+
+    total_gsm_carrier_of_period = total_gsm_events_for_carrier(min_date, max_date)
+    total_gsm_carrier = total_gsm_events_for_carrier(max_date=max_date)
 
     final = {
         "total_devices_of_period": total_devices_of_period,
