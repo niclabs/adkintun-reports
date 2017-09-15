@@ -7,7 +7,7 @@ from app.automatization import monthly_update
 
 
 # Job will be done the first day of every month
-@cron(35, 11, 15, -1, -1, target="mule")
+@cron(40, 11, 15, -1, -1, target="mule")
 def reports_generation(num: int):
     """
     Job updating frontend database and generating reports.
