@@ -18,7 +18,7 @@ def network_report_for_carrier(min_date=datetime(2015, 1, 1),
     SELECT
         telephony_observation_events.network_type,
         antennas.id,
-         sims.carrier_id,
+        sims.carrier_id,
         count(gsm_events.id) as size
 
     FROM
@@ -39,7 +39,7 @@ def network_report_for_carrier(min_date=datetime(2015, 1, 1),
         sims.carrier_id;""")
 
     result = db1.session.query(TelephonyObservationEvent.network_type, Antenna.id,
-                              Sim.carrier_id).add_columns("size").from_statement(stmt).params(
+                               Sim.carrier_id).add_columns("size").from_statement(stmt).params(
         min_date=min_date, max_date=max_date)
 
     final = [dict(network_type=row[0], antenna_id=row[1], carrier_id=row[2], size=row[3]) for row in

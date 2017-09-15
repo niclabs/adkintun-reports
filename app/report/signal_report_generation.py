@@ -46,7 +46,7 @@ def signal_strength_mean_for_antenna(min_date=datetime(2015, 1, 1),
     GROUP BY carrier_id, antenna_id) AS c2;""")
 
     result = db1.session.query().with_labels().add_columns("carrier_id", "antenna_id", "observations",
-                                                          "signal_mean").from_statement(
+                                                           "signal_mean").from_statement(
         stmt).params(
         min_date=min_date, max_date=max_date)
 
