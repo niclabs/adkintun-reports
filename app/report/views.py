@@ -31,7 +31,7 @@ def network_report(year, month):
     return api_reports(type="network_report", year=year, month=month)
 
 
-@application.route("/signal_report/<year>/<month>/")
+@application.route("/reports/signal_report/<year>/<month>/")
 def signal_report(year, month):
     return api_reports(type="signal_report", year=year, month=month)
 
