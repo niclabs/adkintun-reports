@@ -21,7 +21,7 @@ def monthly_update(month=None, year=None):
     :return:
     """
     reports = monthly_reports_generation(month, year)
-    monthly_import(reports)
+    monthly_import(reports, month, year)
 
 
 def monthly_import(reports, month=None, year=None):
