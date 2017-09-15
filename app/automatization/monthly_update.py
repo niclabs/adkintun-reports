@@ -24,24 +24,27 @@ def monthly_update(month=None, year=None):
     monthly_import(reports)
 
 
-def monthly_import(reports):
+def monthly_import(reports, month=None, year=None):
     """
     Receives the four reports as an array and tries to insert
     them into the frontend database.
     :param reports: An array containing reports as dictionaries.
+    :param month: Month number (1-12)
+    :param year: Year number, four digits.
     :return:
     """
-    actual_month = datetime.now().month
-    actual_year = datetime.now().year
-    month_new_import = actual_month - 1
-    year_new_import = actual_year
+    if not month or not year:
+        actual_month = datetime.now().month
+        actual_year = datetime.now().year
+        month_new_import = actual_month - 1
+        year_new_import = actual_year
 
-    if month_new_import == 0:
-        month_new_import = 12
-        year_new_import = year_new_import - 1
+        if month_new_import == 0:
+            month_new_import = 12
+            year_new_import = year_new_import - 1
 
-    year = year_new_import
-    month = month_new_import
+        year = year_new_import
+        month = month_new_import
 
     report_import(reports[0], year, month)
     ranking_import(reports[1], year, month)
