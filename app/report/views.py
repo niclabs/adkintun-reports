@@ -10,8 +10,8 @@ from app.public.views import page_not_found
 
 @application.route("/reports/")
 @application.route("/reports/<path:path>")
-def reports(path="."):
-    return autoindex.render_autoindex(path=path) #, endpoint="reports", mimetype="application/json")
+def reports(path=""):
+    return autoindex.render_autoindex(path=path, endpoint="reports", mimetype="application/json")
 
 
 # reports urls for frontend
