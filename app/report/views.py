@@ -8,30 +8,30 @@ from app.public.views import page_not_found
 # listing reports folder
 # NOT AUTHORIZATION REQUIRED
 
-@application.route("/reports/")
-@application.route("/reports/<path:path>")
+@application.route("/")
+@application.route("/<path:path>")
 def reports(path=""):
-    return autoindex.render_autoindex(path=path) #, endpoint="reports", mimetype="application/json")
+    return autoindex.render_autoindex(path=path, endpoint="reports", mimetype="application/json")
 
 
 # reports urls for frontend
 
-@application.route("/reports/general_report/<year>/<month>/")
+@application.route("/general_report/<year>/<month>/")
 def general_report(year, month):
     return api_reports(type="general_report", year=year, month=month)
 
 
-@application.route("/reports/apps_report/<year>/<month>/")
+@application.route("/apps_report/<year>/<month>/")
 def apps_report(year, month):
     return api_reports(type="apps_report", year=year, month=month)
 
 
-@application.route("/reports/network_report/<year>/<month>/")
+@application.route("/network_report/<year>/<month>/")
 def network_report(year, month):
     return api_reports(type="network_report", year=year, month=month)
 
 
-@application.route("/reports/signal_report/<year>/<month>/")
+@application.route("/signal_report/<year>/<month>/")
 def signal_report(year, month):
     return api_reports(type="signal_report", year=year, month=month)
 
