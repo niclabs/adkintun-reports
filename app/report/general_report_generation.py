@@ -147,7 +147,7 @@ def total_gsm_events_for_carrier(min_date=datetime(2015, 1, 1),
         max_date = datetime.now()
 
     stmt = text("""
-    SELECT sims.carrier_id, count(events.id) AS events_count
+    SELECT sims.carrier_id, count(gsm_events.id) AS events_count
     FROM gsm_events
     JOIN sims ON gsm_events.sim_serial_number = sims.serial_number
     WHERE gsm_events.date BETWEEN :min_date AND :max_date

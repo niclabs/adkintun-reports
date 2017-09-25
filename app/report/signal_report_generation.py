@@ -33,7 +33,7 @@ def signal_strength_mean_for_antenna(min_date=datetime(2015, 1, 1),
     FROM
       public.antennas,
       public.gsm_events,
-      public.sims,
+      public.sims
     WHERE
       gsm_events.antenna_id = antennas.id AND
       gsm_events.sim_serial_number = sims.serial_number AND

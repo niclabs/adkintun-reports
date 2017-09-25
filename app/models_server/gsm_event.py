@@ -17,6 +17,17 @@ class GsmEvent(TelephonyObservationEvent):
     gsm_lac = db1.Column(db1.Integer)
     gsm_cid = db1.Column(db1.Integer)
     antenna_id = db1.Column(db1.Integer, db1.ForeignKey('antennas.id'))
+    telephony_standard = db1.Column(db1.Integer)
+    network_type = db1.Column(db1.Integer)
+    signal_strength_size = db1.Column(db1.Integer)
+    signal_strength_mean = db1.Column(db1.Float)
+    signal_strength_variance = db1.Column(db1.Float)
+    mnc = db1.Column(db1.Integer)
+    mcc = db1.Column(db1.Integer)
+    date = db1.Column(db1.DateTime)
+    app_version_code = db1.Column(db1.String(10))
+    sim_serial_number = db1.Column(db1.String(50), db1.ForeignKey("sims.serial_number"))
+    device_id = db1.Column(db1.String(50), db1.ForeignKey("devices.device_id"))
 
     def __init__(self, date=None, app_version_code=None, sim_serial_number=None, device_id=None,
                  telephony_standard=None, network_type=None, gsm_psc=None, gsm_cid=None, gsm_lac=None,

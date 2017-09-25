@@ -10,7 +10,17 @@ class ApplicationTrafficEvent(TrafficEvent):
     __mapper_args__ = {'polymorphic_identity': 'application_traffic_event'}
 
     id = db1.Column(db1.Integer, db1.ForeignKey('traffic_events.id'), primary_key=True)
-
+    network_type = db1.Column(db1.Integer)
+    rx_bytes = db1.Column(db1.BigInteger)
+    tx_bytes = db1.Column(db1.BigInteger)
+    rx_packets = db1.Column(db1.BigInteger)
+    tx_packets = db1.Column(db1.BigInteger)
+    tcp_rx_bytes = db1.Column(db1.BigInteger)
+    tcp_tx_bytes = db1.Column(db1.BigInteger)
+    date = db1.Column(db1.DateTime)
+    app_version_code = db1.Column(db1.String(10))
+    sim_serial_number = db1.Column(db1.String(50), db1.ForeignKey("sims.serial_number"))
+    device_id = db1.Column(db1.String(50), db1.ForeignKey("devices.device_id"))
     application_id = db1.Column(db1.Integer, db1.ForeignKey('applications.id'))
 
     def __init__(self, date=None, app_version_code=None, sim_serial_number=None, device_id=None, network_type=None,
