@@ -16,7 +16,7 @@ def network_report_for_carrier(min_date=datetime(2015, 1, 1),
 
     stmt = text("""
     SELECT
-        telephony_observation_events.network_type,
+        gsm_events.network_type,
         antennas.id,
         sims.carrier_id,
         count(gsm_events.id) as size
@@ -24,17 +24,13 @@ def network_report_for_carrier(min_date=datetime(2015, 1, 1),
     FROM
         public.antennas,
         public.gsm_events,
-        public.events,
-        public.telephony_observation_events,
         public.sims
     WHERE
         gsm_events.antenna_id = antennas.id AND
-        gsm_events.id = telephony_observation_events.id AND
-        events.id = gsm_events.id AND
-        events.sim_serial_number = sims.serial_number AND
-        events.date BETWEEN :min_date AND :max_date
+        gsm_events.sim_serial_number = sims.serial_number AND
+        gsm_events.date BETWEEN :min_date AND :max_date
     GROUP BY
-        telephony_observation_events.network_type,
+        gsm_events.network_type,
         antennas.id,
         sims.carrier_id;""")
 

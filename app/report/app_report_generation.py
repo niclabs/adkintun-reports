@@ -24,7 +24,7 @@ def app_report(min_date=datetime(2015, 1, 1), max_date=None):
         if carrier == "ALL_CARRIERS":
             carrier_stmt = ""
         else:
-            carrier_stmt = "sims.serial_number = events.sim_serial_number AND" \
+            carrier_stmt = "sims.serial_number = application_traffic_events.sim_serial_number AND" \
                            " sims.carrier_id = :carrier_id AND"
 
         for type, value in network_type.items():
@@ -33,9 +33,10 @@ def app_report(min_date=datetime(2015, 1, 1), max_date=None):
                 final[carrier][type][mode] = {}
 
                 if mode == "ALL":
-                    connection_stmt = "SUM(traffic_events.tx_bytes + traffic_events.rx_bytes) AS bytes,"
+                    connection_stmt = "SUM(application_traffic_events.tx_bytes + " +\
+                                      "application_traffic_events.rx_bytes) AS bytes,"
                 else:
-                    connection_stmt = "SUM(traffic_events." + name + ") AS bytes,"
+                    connection_stmt = "SUM(application_traffic_events." + name + ") AS bytes,"
 
                 stmt = text(
                     """
@@ -50,20 +51,16 @@ def app_report(min_date=datetime(2015, 1, 1), max_date=None):
                             applications.package_name as app_name,
                             COUNT (DISTINCT devices.device_id) as devices
                         FROM
-                            public.traffic_events,
-                            public.events,
                             public.applications,
                             public.application_traffic_events,
                             public.devices,
                             public.sims
                         WHERE
-                            traffic_events.id = application_traffic_events.id AND
-                            events.id = traffic_events.id AND
-                            events.device_id = devices.device_id AND
+                            application_traffic_events.device_id = devices.device_id AND
                              """ + carrier_stmt + """
                             application_traffic_events.application_id = applications.id AND
-                            traffic_events.network_type = :network_type AND
-                            events.date BETWEEN :min_date AND :max_date
+                            application_traffic_events.network_type = :network_type AND
+                            application_traffic_events.date BETWEEN :min_date AND :max_date
                         GROUP BY applications.package_name
                         ORDER BY bytes DESC) AS QUERY
                      ORDER BY bytes_per_user DESC LIMIT :number_app;""")
