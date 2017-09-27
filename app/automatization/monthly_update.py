@@ -91,6 +91,7 @@ def monthly_reports_generation(month=None, year=None):
     network = None
 
     try:
+        reportLogger.info("Starting general report generation.")
         general = general_report(init_date, last_date)
         save_json_report_to_file(general, init_date.year, init_date.month, 'general_report_')
         reportLogger.info("General report for {}/{} has been generated".format(month_new_report, year_new_report))
@@ -98,6 +99,7 @@ def monthly_reports_generation(month=None, year=None):
         reportLogger.info("General report generation failed:" + str(e))
 
     try:
+        reportLogger.info("Starting app report generation.")
         app = app_report(init_date, last_date)
         save_json_report_to_file(app, init_date.year, init_date.month, 'apps_report_')
         reportLogger.info("Apps report for {}/{} has been generated".format(month_new_report, year_new_report))
@@ -105,6 +107,7 @@ def monthly_reports_generation(month=None, year=None):
         reportLogger.info("Apps report generation failed:" + str(e))
 
     try:
+        reportLogger.info("Starting signal report generation.")
         signal = signal_strength_mean_for_antenna(init_date, last_date)
         save_json_report_to_file(signal, init_date.year, init_date.month, 'signal_report_')
         reportLogger.info("Signal report for {}/{} has been generated".format(month_new_report, year_new_report))
@@ -112,6 +115,7 @@ def monthly_reports_generation(month=None, year=None):
         reportLogger.info("Signal report generation failed:" + str(e))
 
     try:
+        reportLogger.info("Starting network report generation.")
         network = network_report_for_carrier(init_date, last_date)
         save_json_report_to_file(network, init_date.year, init_date.month, 'network_report_')
         reportLogger.info("Network report for {}/{} has been generated".format(month_new_report, year_new_report))
