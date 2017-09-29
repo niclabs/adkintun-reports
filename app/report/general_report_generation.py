@@ -60,7 +60,7 @@ def total_devices_registered(min_date=datetime(2015, 1, 1),
     if not max_date:
         max_date = datetime.now()
 
-    return Device.query.filter(Device.events != None, Device.creation_date.between(min_date, max_date)).count()
+    return Device.query.filter(Device.creation_date.between(min_date, max_date)).count()
 
 
 def total_sims_registered(min_date=datetime(2015, 1, 1),
