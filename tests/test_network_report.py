@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from app import application, db1, db2
-from test import base_test
+from tests import base_test
 from app.report import network_report_for_carrier
 from app.importation import gsm_count_import
 
@@ -36,33 +36,30 @@ class TestNetworkReport(base_test.BaseTest):
         antenna2.lat = 2
         antenna2.lon = 2
 
-        event1 = GsmEvent(network_type=1, date=datetime.now())
-        sim1.events.append(event1)
+        event1 = GsmEvent(network_type=1, date=datetime.now(), sim_serial_number="123", carrier_id=1000)
         antenna1.gsm_events.append(event1)
 
-        event2 = GsmEvent(network_type=1, date=datetime.now())
-        sim1.events.append(event2)
+        event2 = GsmEvent(network_type=1, date=datetime.now(), sim_serial_number="123", carrier_id=1000)
         antenna1.gsm_events.append(event2)
 
-        event3 = GsmEvent(network_type=1, date=datetime.now())
-        sim2.events.append(event3)
+        event3 = GsmEvent(network_type=1, date=datetime.now(), sim_serial_number="456", carrier_id=1001)
         antenna1.gsm_events.append(event3)
 
-        event4 = GsmEvent(network_type=1, date=datetime.now())
-        sim1.events.append(event4)
+        event4 = GsmEvent(network_type=1, date=datetime.now(), sim_serial_number="123", carrier_id=1000)
         antenna2.gsm_events.append(event4)
 
-        event5 = GsmEvent(network_type=6, date=datetime.now())
-        sim1.events.append(event5)
+        event5 = GsmEvent(network_type=6, date=datetime.now(), sim_serial_number="123", carrier_id=1000)
         antenna2.gsm_events.append(event5)
 
         # should not show in report
-        event6 = GsmEvent(network_type=6, date=datetime.now()+timedelta(days=1))
-        sim2.events.append(event6)
+        event6 = GsmEvent(network_type=6, date=datetime.now()+timedelta(days=1),
+                          sim_serial_number="123", carrier_id=1000)
         antenna2.gsm_events.append(event6)
 
         db1.session.add(carrier1)
         db1.session.add(carrier2)
+        db1.session.add(antenna1)
+        db1.session.add(antenna2)
         db1.session.commit()
 
     def test_report_generation(self):

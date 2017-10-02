@@ -1,6 +1,6 @@
 from datetime import datetime
 from app import application, db1, db2
-from test import base_test
+from tests import base_test
 from app.report import app_report
 from app.importation import ranking_import
 

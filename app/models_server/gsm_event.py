@@ -1,44 +1,46 @@
-from app import db1
-from app.models_server.telephony_observation_event import TelephonyObservationEvent
+from app import db1 as db
+from app.models_server.base_model import BaseModel
 
 
-class GsmEvent(TelephonyObservationEvent):
+class GsmEvent(BaseModel):
     '''
     Gsm observation events model class
     '''
     __tablename__ = 'gsm_events'
-    __mapper_args__ = {'polymorphic_identity': 'gsm_event'}
 
-    id = db1.Column(db1.Integer, db1.ForeignKey('telephony_observation_events.id'), primary_key=True)
-    gsm_psc = db1.Column(db1.Integer)
-    signal_ber_size = db1.Column(db1.Integer)
-    signal_ber_mean = db1.Column(db1.Float)
-    signal_ber_variance = db1.Column(db1.Float)
-    gsm_lac = db1.Column(db1.Integer)
-    gsm_cid = db1.Column(db1.Integer)
-    antenna_id = db1.Column(db1.Integer, db1.ForeignKey('antennas.id'))
-    telephony_standard = db1.Column(db1.Integer)
-    network_type = db1.Column(db1.Integer)
-    signal_strength_size = db1.Column(db1.Integer)
-    signal_strength_mean = db1.Column(db1.Float)
-    signal_strength_variance = db1.Column(db1.Float)
-    mnc = db1.Column(db1.Integer)
-    mcc = db1.Column(db1.Integer)
-    date = db1.Column(db1.DateTime)
-    app_version_code = db1.Column(db1.String(10))
-    sim_serial_number = db1.Column(db1.String(50), db1.ForeignKey("sims.serial_number"))
-    device_id = db1.Column(db1.String(50), db1.ForeignKey("devices.device_id"))
+    id = db.Column(db.Integer, primary_key=True)
+    gsm_psc = db.Column(db.Integer)
+    signal_ber_size = db.Column(db.Integer)
+    signal_ber_mean = db.Column(db.Float)
+    signal_ber_variance = db.Column(db.Float)
+    gsm_lac = db.Column(db.Integer)
+    gsm_cid = db.Column(db.Integer)
+    antenna_id = db.Column(db.Integer, db.ForeignKey('antennas.id'))
+    telephony_standard = db.Column(db.Integer)
+    network_type = db.Column(db.Integer)
+    signal_strength_size = db.Column(db.Integer)
+    signal_strength_mean = db.Column(db.Float)
+    signal_strength_variance = db.Column(db.Float)
+    mnc = db.Column(db.Integer)
+    mcc = db.Column(db.Integer)
+    date = db.Column(db.DateTime, index=True)
+    app_version_code = db.Column(db.String(10))
+    sim_serial_number = db.Column(db.String(50), db.ForeignKey("sims.serial_number"))
+    device_id = db.Column(db.String(50), db.ForeignKey("devices.device_id"), index=True)
+    carrier_id = db.Column(db.Integer, db.ForeignKey("carriers.id"))
 
-    def __init__(self, date=None, app_version_code=None, sim_serial_number=None, device_id=None,
+    def __init__(self, date=None, app_version_code=None, sim_serial_number=None, device_id=None, antenna_id=None,
                  telephony_standard=None, network_type=None, gsm_psc=None, gsm_cid=None, gsm_lac=None,
                  signal_strength_size=None, signal_strength_mean=None, signal_strength_variance=None,
-                 signal_ber_size=None, signal_ber_mean=None, signal_ber_variance=None, mnc=None, mcc=None):
+                 signal_ber_size=None, signal_ber_mean=None, signal_ber_variance=None, mnc=None, mcc=None,
+                 carrier_id=None):
         self.date = date
         self.app_version_code = app_version_code
         self.sim_serial_number = sim_serial_number
         self.device_id = device_id
         self.telephony_standard = telephony_standard
         self.network_type = network_type
+        self.antenna_id = antenna_id
         self.signal_strength_size = signal_strength_size
         self.signal_strength_mean = signal_strength_mean
         self.signal_strength_variance = signal_strength_variance
@@ -50,6 +52,7 @@ class GsmEvent(TelephonyObservationEvent):
         self.gsm_lac = gsm_lac
         self.mnc = mnc
         self.mcc = mcc
+        self.carrier_id = carrier_id
 
     def __repr__(self):
         return '<GsmEvent, id: %r, date: %r>' % (self.id, self.date)

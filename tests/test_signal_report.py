@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from app import application, db1, db2
-from test import base_test
+from tests import base_test
 from app.report import signal_strength_mean_for_antenna
 from app.importation import gsm_signal_import
 
@@ -35,29 +35,31 @@ class TestSignalReport(base_test.BaseTest):
         antenna2.lat = 2
         antenna2.lon = 2
 
-        event1 = GsmEvent(signal_strength_size=2, signal_strength_mean=10, date=datetime.now())
-        sim1.events.append(event1)
+        event1 = GsmEvent(signal_strength_size=2, signal_strength_mean=10, date=datetime.now(),
+                          sim_serial_number="123", carrier_id=1000)
         antenna1.gsm_events.append(event1)
 
-        event2 = GsmEvent(signal_strength_size=5, signal_strength_mean=100, date=datetime.now())
-        sim2.events.append(event2)
+        event2 = GsmEvent(signal_strength_size=5, signal_strength_mean=75, date=datetime.now(),
+                          sim_serial_number="456", carrier_id=1001)
         antenna2.gsm_events.append(event2)
 
         # should not show in report
-        event3 = GsmEvent(signal_strength_size=4, signal_strength_mean=50, date=datetime.now() + timedelta(days=1))
-        sim2.events.append(event3)
+        event3 = GsmEvent(signal_strength_size=4, signal_strength_mean=50, date=datetime.now() + timedelta(days=1),
+                          sim_serial_number="456", carrier_id=1001)
         antenna1.gsm_events.append(event3)
 
-        event4 = GsmEvent(signal_strength_size=6, signal_strength_mean=150, date=datetime.now())
-        sim1.events.append(event4)
+        event4 = GsmEvent(signal_strength_size=6, signal_strength_mean=90, date=datetime.now(),
+                          sim_serial_number="123", carrier_id=1000)
         antenna2.gsm_events.append(event4)
 
-        event5 = GsmEvent(signal_strength_size=6, signal_strength_mean=40, date=datetime.now())
-        sim1.events.append(event5)
+        event5 = GsmEvent(signal_strength_size=6, signal_strength_mean=40, date=datetime.now(),
+                          sim_serial_number="123", carrier_id=1000)
         antenna1.gsm_events.append(event5)
 
         db1.session.add(carrier1)
         db1.session.add(carrier2)
+        db1.session.add(antenna1)
+        db1.session.add(antenna2)
         db1.session.commit()
 
     def test_report_generation(self):
@@ -71,13 +73,13 @@ class TestSignalReport(base_test.BaseTest):
         self.assertEqual(report[0]['carrier_id'], 1001)
         self.assertEqual(report[0]['antenna_id'], 1000)
         self.assertEqual(report[0]['observations'], 5)
-        self.assertEqual(report[0]['signal_mean'], 100)
+        self.assertEqual(report[0]['signal_mean'], 75)
 
         # carrier 1, antenna 2
         self.assertEqual(report[1]['carrier_id'], 1000)
         self.assertEqual(report[1]['antenna_id'], 1000)
         self.assertEqual(report[1]['observations'], 6)
-        self.assertEqual(report[1]['signal_mean'], 150)
+        self.assertEqual(report[1]['signal_mean'], 90)
 
         # carrier 1, antenna 1
         self.assertEqual(report[2]['carrier_id'], 1000)
@@ -104,12 +106,12 @@ class TestSignalReport(base_test.BaseTest):
 
         self.assertEqual(result[0].antenna_id, 1000)
         self.assertEqual(result[0].carrier_id, 1000)
-        self.assertEqual(result[0].signal, 150)
+        self.assertEqual(result[0].signal, 90)
         self.assertEqual(result[0].quantity, 6)
 
         self.assertEqual(result[1].antenna_id, 1000)
         self.assertEqual(result[1].carrier_id, 1001)
-        self.assertEqual(result[1].signal, 100)
+        self.assertEqual(result[1].signal, 75)
         self.assertEqual(result[1].quantity, 5)
 
         self.assertEqual(result[2].antenna_id, 1337)
