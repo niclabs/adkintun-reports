@@ -224,7 +224,6 @@ def get_antenna(an_id):
     if lat is None or lon is None:
         return 'Antenna with no lat or lon'
 
-
     db2.session.add(Antenna2(id=an_id, cid=cid, lac=lac, lat=lat, lon=lon, carrier_id=carrier_id))
 
     try:
@@ -251,60 +250,6 @@ def refresh_materialized_views():
         db2.engine.execute(sql)
     except Exception:
         pass
-
-
-def refresh_antennas_json():
-    reportLogger.info("Refreshing antennas json")
-    from app.models_frontend.network_type import NetworkType
-    from sqlalchemy import func
-    import os
-    try:
-        carriers = Carrier.query.all()
-        carriers = ['0'] + [str(c.id) for c in carriers]
-        for carrier in carriers:
-#            reportLogger.info("Refreshing antennas json for carrier {}".format(carrier))
-            if carrier == '0':
-                query = GsmCount.query
-            else:
-                query = GsmCount.query.filter(GsmCount.carrier_id == carrier)
-            result = query.join(NetworkType).join(Antenna2).join(Carrier, Carrier.id == Antenna2.carrier_id).with_entities(
-                func.sum(GsmCount.quantity).label('c'),
-                GsmCount.antenna_id, NetworkType.type, Carrier.name, Antenna2.lat, Antenna2.lon
-            ).group_by(GsmCount.antenna_id, NetworkType.type, Carrier.name, Antenna2.lat, Antenna2.lon).all()
-
-            antennas_data = {}
-            antennas_count = 0
-            for row in result:
-                antenna_id = row.antenna_id
-                quantity = row.c
-                network_type = row.type
-                carrier_name = row.name
-                lat = row.lat
-                lon = row.lon
-                if antenna_id not in antennas_data:
-                    antennas_data[antenna_id] = {'lat': lat,
-                                                 'lon': lon,
-                                                 'carrier': carrier_name,
-                                                 '2G': 0,
-                                                 '3G': 0,
-                                                 '4G': 0,
-                                                 'Otras': 0,
-                                                 'Total': 0}
-
-                    antennas_count += 1
-                antennas_data[antenna_id][network_type] = quantity
-                antennas_data[antenna_id]['Total'] += quantity
-            antennas_info = {'antennasData': antennas_data,
-                             'totalAntennas': antennas_count}
-            antennas_dir = "app/static/json/gsm_count/"
-            if not os.path.exists(antennas_dir):
-                os.makedirs(antennas_dir)
-            with open("app/static/json/gsm_count/"+carrier+".json", "w") as jsonfile:
-                    json.dump(antennas_info, jsonfile)
-            reportLogger.info("Finished refreshing antennas json for carrier {}".format(carrier))
-    except Exception as e:
-        reportLogger.error("Couldn't refresh antennas json:" + str(e))
-
 
 class DifferentIdException(Exception):
     pass

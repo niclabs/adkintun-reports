@@ -13,7 +13,6 @@ from app.importation import ranking_import
 from app.importation import gsm_signal_import
 from app.importation import gsm_count_import
 from app.importation import refresh_materialized_views
-from app.importation import refresh_antennas_json
 
 
 def monthly_update(month=None, year=None):
@@ -53,7 +52,6 @@ def monthly_import(reports, month=None, year=None):
     gsm_count_import(reports[3], year, month)
 
     refresh_materialized_views()
-    refresh_antennas_json()
 
 
 def monthly_reports_generation(month=None, year=None):
