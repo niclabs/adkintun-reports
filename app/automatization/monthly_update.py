@@ -6,6 +6,7 @@ from app.report import general_report
 from app.report import app_report
 from app.report import signal_strength_mean_for_antenna
 from app.report import network_report_for_carrier
+from app.report import network_report_for_4g
 
 from app.importation import report_import
 from app.importation import ranking_import
@@ -89,22 +90,7 @@ def monthly_reports_generation(month=None, year=None):
     app = None
     signal = None
     network = None
-
-    try:
-        reportLogger.info("Starting signal report generation.")
-        signal = signal_strength_mean_for_antenna(init_date, last_date)
-        save_json_report_to_file(signal, init_date.year, init_date.month, 'signal_report_')
-        reportLogger.info("Signal report for {}/{} has been generated".format(month_new_report, year_new_report))
-    except Exception as e:
-        reportLogger.info("Signal report generation failed:" + str(e))
-
-    try:
-        reportLogger.info("Starting network report generation.")
-        network = network_report_for_carrier(init_date, last_date)
-        save_json_report_to_file(network, init_date.year, init_date.month, 'network_report_')
-        reportLogger.info("Network report for {}/{} has been generated".format(month_new_report, year_new_report))
-    except Exception as e:
-        reportLogger.info("Network report generation failed:" + str(e))
+    network4g = None
 
     try:
         reportLogger.info("Starting general report generation.")
@@ -122,4 +108,28 @@ def monthly_reports_generation(month=None, year=None):
     except Exception as e:
         reportLogger.info("Apps report generation failed:" + str(e))
 
-    return [general, app, signal, network]
+    try:
+        reportLogger.info("Starting network report generation.")
+        network = network_report_for_carrier(init_date, last_date)
+        save_json_report_to_file(network, init_date.year, init_date.month, 'network_report_')
+        reportLogger.info("Network report for {}/{} has been generated".format(month_new_report, year_new_report))
+    except Exception as e:
+        reportLogger.info("Network report generation failed:" + str(e))
+
+    try:
+        reportLogger.info("Starting signal report generation.")
+        signal = signal_strength_mean_for_antenna(init_date, last_date)
+        save_json_report_to_file(signal, init_date.year, init_date.month, 'signal_report_')
+        reportLogger.info("Signal report for {}/{} has been generated".format(month_new_report, year_new_report))
+    except Exception as e:
+        reportLogger.info("Signal report generation failed:" + str(e))
+
+    try:
+        reportLogger.info("Starting 4g report generation.")
+        network4g = network_report_for_4g(init_date, last_date)
+        save_json_report_to_file(network4g, init_date.year, init_date.month, '4g_report_')
+        reportLogger.info("4g report for {}/{} has been generated".format(month_new_report, year_new_report))
+    except Exception as e:
+        reportLogger.info("4g report generation failed:" + str(e))
+
+    return [general, app, signal, network, network4g]
