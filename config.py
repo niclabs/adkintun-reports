@@ -25,9 +25,9 @@ class TestConfig(object):
     USER = "testuser"
     SECRET_KEY = "testpassword123"
     BIND_KEY = "frontend"
-    SQLALCHEMY_DATABASE_URI = "postgresql://" + USER + ":" + SECRET_KEY + "@localhost/nothing"
+    SQLALCHEMY_DATABASE_URI = "postgresql://" + USER + ":" + SECRET_KEY + "@localhost/test_server"
     SQLALCHEMY_BINDS = {
-        BIND_KEY: "postgresql://" + USER + ":" + SECRET_KEY + "@localhost/everything"
+        BIND_KEY: "postgresql://" + USER + ":" + SECRET_KEY + "@localhost/test_frontend"
     }
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     PRESERVE_CONTEXT_ON_EXCEPTION = False
