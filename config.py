@@ -22,17 +22,26 @@ class DefaultConfig(object):
 
 
 class TestConfig(object):
-    USER = "testuser"
-    SECRET_KEY = "testpassword123"
-    BIND_KEY = "frontend"
-    SQLALCHEMY_DATABASE_URI = "postgresql://" + USER + ":" + SECRET_KEY + "@localhost/test_server"
-    SQLALCHEMY_BINDS = {
-        BIND_KEY: "postgresql://" + USER + ":" + SECRET_KEY + "@localhost/test_frontend"
-    }
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
-    PRESERVE_CONTEXT_ON_EXCEPTION = False
     TESTING = True
     DEBUG = True
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
+    PRESERVE_CONTEXT_ON_EXCEPTION = False
+
+    USER_SERVER = "this-should-be-changed"
+    SECRET_KEY_SERVER = "this-should-be-changed"
+    HOST_SERVER = "this-should-be-changed"
+    DB_NAME_SERVER = "this-should-be-changed"
+    SQLALCHEMY_DATABASE_URI = "postgresql://{}:{}@{}/{}".format(USER_SERVER, SECRET_KEY_SERVER,
+                                                                HOST_SERVER, DB_NAME_SERVER)
+    BIND_KEY = "frontend"
+    USER_FRONTEND = "this-should-be-changed"
+    SECRET_KEY_FRONTEND = "this-should-be-changed"
+    HOST_FRONTEND = "this-should-be-changed"
+    DB_NAME_FRONTEND = "this-should-be-changed"
+    SQLALCHEMY_BINDS = {
+        BIND_KEY: "postgresql://{}:{}@{}/{}".format(USER_FRONTEND, SECRET_KEY_FRONTEND,
+                                                    HOST_FRONTEND, DB_NAME_FRONTEND)
+    }
 
 
 class Files:
