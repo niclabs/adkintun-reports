@@ -41,21 +41,16 @@ class TestAppReport(base_test.BaseTest):
         app2 = Application("test_name2")
         app2.id = 20
 
-        event1 = ApplicationTrafficEvent(date=datetime.now(), network_type=1, rx_bytes=1000, tx_bytes=500)
-        event2 = ApplicationTrafficEvent(date=datetime.now(), network_type=1, rx_bytes=2500, tx_bytes=1000)
-        event3 = ApplicationTrafficEvent(date=datetime.now(), network_type=6, rx_bytes=10000, tx_bytes=2000)
-        event4 = ApplicationTrafficEvent(date=datetime.now(), network_type=1, rx_bytes=2000, tx_bytes=1500)
-        event5 = ApplicationTrafficEvent(date=datetime.now(), network_type=1, rx_bytes=1500, tx_bytes=750)
-
-        sim1.events.append(event1)
-        sim1.events.append(event2)
-        sim1.events.append(event3)
-        sim2.events.append(event4)
-        sim2.events.append(event5)
-
-        device1.events = [event1]
-        device2.events = [event2, event3]
-        device3.events = [event4, event5]
+        event1 = ApplicationTrafficEvent(date=datetime.now(), network_type=1, rx_bytes=1000, tx_bytes=500,
+                                         sim_serial_number="123", device_id="1")
+        event2 = ApplicationTrafficEvent(date=datetime.now(), network_type=1, rx_bytes=2500, tx_bytes=1000,
+                                         sim_serial_number="123", device_id="2")
+        event3 = ApplicationTrafficEvent(date=datetime.now(), network_type=6, rx_bytes=10000, tx_bytes=2000,
+                                         sim_serial_number="123", device_id="2")
+        event4 = ApplicationTrafficEvent(date=datetime.now(), network_type=1, rx_bytes=2000, tx_bytes=1500,
+                                         sim_serial_number="456", device_id="3")
+        event5 = ApplicationTrafficEvent(date=datetime.now(), network_type=1, rx_bytes=1500, tx_bytes=750,
+                                         sim_serial_number="456", device_id="3")
 
         app1.application_traffic_event.append(event1)
         app1.application_traffic_event.append(event2)
@@ -65,6 +60,9 @@ class TestAppReport(base_test.BaseTest):
 
         db1.session.add(carrier1)
         db1.session.add(carrier2)
+        db1.session.commit()
+        db1.session.add(app1)
+        db1.session.add(app2)
         db1.session.commit()
 
     def test_report_generation(self):

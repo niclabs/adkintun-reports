@@ -4,10 +4,10 @@ class DefaultConfig(object):
     CSRF_ENABLED = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
 
-    USER_SERVER = "niclabs"
-    SECRET_KEY_SERVER = "niclabs"
-    HOST_SERVER = "172.30.65.178"
-    DB_NAME_SERVER = "adkintunMobile"
+    USER_SERVER = "this-should-be-changed"
+    SECRET_KEY_SERVER = "this-should-be-changed"
+    HOST_SERVER = "this-should-be-changed"
+    DB_NAME_SERVER = "this-should-be-changed"
     SQLALCHEMY_DATABASE_URI = "postgresql://{}:{}@{}/{}".format(USER_SERVER, SECRET_KEY_SERVER,
                                                                 HOST_SERVER, DB_NAME_SERVER)
     BIND_KEY = "frontend"
@@ -39,4 +39,4 @@ class Files:
     STATIC_FILES_FOLDER = "app/static"
     REPORTS_FOLDER = STATIC_FILES_FOLDER + "/" + "reports"
     LOGS_FOLDER = "tmp"
-    REPORTS_LOG_FILE = "report.log"
+    REPORTS_LOG_FILE = "update.log"

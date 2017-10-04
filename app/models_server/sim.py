@@ -13,7 +13,7 @@ class Sim(base_model.BaseModel):
     creation_date = db1.Column(db1.Date())
     carrier_id = db1.Column(db1.Integer, db1.ForeignKey("carriers.id"))
     devices = db1.relationship("Device", secondary=devices_sims, backref=db1.backref("sims", lazy="dynamic"),
-                              lazy="dynamic")
+                               lazy="dynamic")
     events = db1.relationship("Event", backref="sim", lazy="dynamic")
 
     def __init__(self, serial_number=None, creation_date=None, carrier_id=None):

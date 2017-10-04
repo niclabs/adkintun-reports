@@ -40,25 +40,20 @@ class TestGeneralReport(base_test.BaseTest):
         carrier1.sims.append(sim2)
         carrier2.sims.append(sim3)
 
-        event1 = GsmEvent(date=datetime.now() + timedelta(days=-2))
-        event2 = GsmEvent(date=datetime.now())
-        event3 = GsmEvent(date=datetime.now())
-        event4 = GsmEvent(date=datetime.now())
-        event5 = GsmEvent(date=datetime.now())
-
-        sim1.events.append(event1)
-        sim1.events.append(event2)
-        sim2.events.append(event3)
-        sim2.events.append(event4)
-        sim3.events.append(event5)
-
-        device1.events = [event2, event3]
-        device2.events = [event1]
-        device3.events = [event4]
-        device4.events = [event5]
+        event1 = GsmEvent(date=datetime.now() + timedelta(days=-2), sim_serial_number="123", device_id="2")
+        event2 = GsmEvent(date=datetime.now(), sim_serial_number="123", device_id="1")
+        event3 = GsmEvent(date=datetime.now(), sim_serial_number="456", device_id="1")
+        event4 = GsmEvent(date=datetime.now(), sim_serial_number="456", device_id="3")
+        event5 = GsmEvent(date=datetime.now(), sim_serial_number="789", device_id="4")
 
         db1.session.add(carrier1)
         db1.session.add(carrier2)
+        db1.session.commit()
+        db1.session.add(event1)
+        db1.session.add(event2)
+        db1.session.add(event3)
+        db1.session.add(event4)
+        db1.session.add(event5)
         db1.session.commit()
 
     def test_report_generation(self):

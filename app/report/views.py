@@ -1,8 +1,7 @@
-from flask import json, jsonify
+from flask import json, jsonify, render_template
 
 from app import application
 from app import autoindex
-from app.public.views import page_not_found
 
 
 # listing reports folder
@@ -37,6 +36,10 @@ def signal_report(year, month):
 
 
 # utils
+
+@application.errorhandler(404)
+def page_not_found(error):
+    return render_template("page_not_found.html"), 404
 
 
 def api_reports(type, year, month):
